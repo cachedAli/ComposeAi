@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: "Inter", "sans-serif";
+    --color-bg: #0d0d0d;
+  }
+}
+
+@theme {
+  --font-outfit: "Outfit", "sans-serif";
+  --font-sans: "Inter", "sans-serif";
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: white;
+}
+
+html {
+  scroll-behavior: smooth;
+}
