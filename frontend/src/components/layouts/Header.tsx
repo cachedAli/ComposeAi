@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import composeAi from "/composeAi.png";
 import Button from "../ui/Button";
 
-const Header = ({ isHero }: { isHero: boolean }) => {
+const Header = ({ isHero }: { isHero?: boolean }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 

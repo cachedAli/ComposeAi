@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-import HeroSection from "@/components/layouts/HeroSection";
+import HeroSection from "@/components/layouts/homepage/HeroSection";
 import Header from "@/components/layouts/Header";
-import Features from "@/components/layouts/Features";
-import HowItWorks from "@/components/layouts/HowItWorks";
-import CtaSection from "@/components/layouts/CtaSection";
-import Footer from "@/components/layouts/Footer";
+import Features from "@/components/layouts/homepage/Features";
+import HowItWorks from "@/components/layouts/homepage/HowItWorks";
+import CtaSection from "@/components/layouts/homepage/CtaSection";
+import Footer from "@/components/layouts/homepage/Footer";
 
 const Homepage = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -38,9 +38,9 @@ const Homepage = () => {
       <div className="mt-20 flex flex-col gap-20">
         <HeroSection />
         <Features />
-        <HowItWorks/>
-        <CtaSection/>
-        <Footer/>
+        <HowItWorks />
+        <CtaSection />
+        <Footer />
       </div>
     </div>
   );

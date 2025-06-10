@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { motion } from "framer-motion";
 
 import { features } from "@/libs/constants/homepageConstants";
 
@@ -39,7 +40,14 @@ const AllFeatures = () => {
       )}
     >
       {features.map((feature, i) => (
-        <div key={i} className="flex flex-col items-center justify-center">
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: i * 0.1 }}
+          viewport={{ once: true }}
+          className="flex flex-col items-center justify-center"
+        >
           <span className="size-24 bg-[#1F1D27] flex items-center justify-center rounded-full mb-4">
             <feature.icon size={30} className="text-cyan-500" />
           </span>
@@ -49,7 +57,7 @@ const AllFeatures = () => {
               {feature.description}
             </p>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
   );

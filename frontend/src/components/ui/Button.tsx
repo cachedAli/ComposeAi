@@ -3,7 +3,7 @@ import { cn } from "@/libs/utils";
 type ButtonProps = {
   children: React.ReactNode;
   type?: "button" | "submit" | "reset";
-  onClick: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   variant?: "primary" | "secondary" | "danger";
   disabled?: boolean;

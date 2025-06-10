@@ -1,10 +1,11 @@
 import clsx from "clsx";
+import { motion } from "framer-motion";
 
 import { howItWorks } from "@/libs/constants/homepageConstants";
 
 const HowItWorks = () => {
   return (
-    <div
+    <section
       id="howItWorks"
       className="flex items-center justify-center flex-col gap-6 py-6 px-2 text-center"
     >
@@ -22,7 +23,7 @@ const HowItWorks = () => {
         </h1>
       </div>
       <HowItWorksSteps />
-    </div>
+    </section>
   );
 };
 
@@ -32,15 +33,19 @@ const HowItWorksSteps = () => {
   return (
     <div className={clsx("flex flex-wrap items-center gap-4 mt-20")}>
       {howItWorks.map((steps, i) => (
-        <HowItWorksCard key={i} steps={steps} />
+        <HowItWorksCard key={i} steps={steps} i={i} />
       ))}
     </div>
   );
 };
 
-const HowItWorksCard = ({ steps }: { steps: any }) => {
+const HowItWorksCard = ({ steps, i }: { steps: any; i: number }) => {
   return (
-    <section
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.6, delay: i * 0.15 }}
       className={clsx(
         "group border border-gray-700 border-l-indigo-500 flex flex-col justify-center items-center rounded-2xl p-8 flex-1 h-full text-start gap-24 transition-colors duration-300",
         "hover:border-b-indigo-500 hover:border-t-cyan-500 hover:border-r-cyan-500"
@@ -61,7 +66,7 @@ const HowItWorksCard = ({ steps }: { steps: any }) => {
         {/* Gradient overlays */}
         <GradientOverlays />
       </div>
-    </section>
+    </motion.div>
   );
 };
 

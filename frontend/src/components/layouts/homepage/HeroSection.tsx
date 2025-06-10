@@ -1,11 +1,10 @@
 import clsx from "clsx";
 
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Zap } from "lucide-react";
 
-import logo from "/composeAiLogo.png";
-import Button from "../ui/Button";
+import { AnimatedLogo } from "@/components/ui/AnimatedLogo";
+import Button from "../../ui/Button";
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -62,27 +61,10 @@ const HeroImg = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-indigo-500 to-emerald-500 rounded-lg blur-xl opacity-70 transform -rotate-6 scale-105"></div>
       <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 via-indigo-500 to-emerald-400 rounded-lg blur-xl opacity-70 transform rotate-6 scale-105"></div>
 
-      <span className="h-[500px] w-[500px] bg-white z-10 rounded-2xl"></span>
-      <motion.img
-        src={logo}
-        className="absolute -top-16 -right-16 z-20"
-        animate={{
-          x: 0,
-          opacity: 1,
-          rotateX: [0, 10, 0, -10, 0],
-          rotateY: [0, 10, 0, -10, 0],
-          scale: [1, 1.02, 1],
-        }}
-        transition={{
-          duration: 1,
-          delay: 1.2,
-          opacity: { duration: 1 },
-          x: { duration: 1 },
-          rotateX: { repeat: Infinity, duration: 6, ease: "easeInOut" },
-          rotateY: { repeat: Infinity, duration: 6, ease: "easeInOut" },
-          scale: { repeat: Infinity, duration: 6, ease: "easeInOut" },
-        }}
-      />
+      <span className="h-[500px] w-[1000px] bg-gray-800 z-10 rounded-2xl text-4xl flex items-center justify-center">
+        Image Placeholder
+      </span>
+      <AnimatedLogo/>
     </div>
   );
 };
