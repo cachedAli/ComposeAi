@@ -14,3 +14,23 @@ export const capitalizeFirstLetter = (string: string) => {
         return word[0].toUpperCase() + word.slice(1)
     }).join(" ")
 }
+
+export const createUserObject = (user: any) => {
+    if (!user) {
+        throw new Error("user object is required");
+    }
+
+    const meta = user.user_metadata || {};
+    const fullName = meta.full_name || "";
+    const [firstName, ...lastParts] = fullName.split(" ");
+    const lastName = lastParts.join(" ");
+
+    return {
+        id: user?.id,
+        firstName: firstName || meta.firstName,
+        lastName: lastName || meta.lastName,
+        email: user.email ?? "",
+        profilePic: meta.avatar_url
+
+    }
+}

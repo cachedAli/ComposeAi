@@ -7,7 +7,7 @@ import Button from "@/components/ui/Button";
 const EmailSent = () => {
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex rounded-2xl bg-neutral-700/40 p-5 ">
+      <div className="flex rounded-2xl bg-neutral-700/40 p-5">
         <TbMailShare size={96} className="text-cyan-500" />
       </div>
 

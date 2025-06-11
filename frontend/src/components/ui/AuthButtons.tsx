@@ -3,11 +3,29 @@ import { IoLogoGithub } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 
 import Button from "./Button";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const AuthButtons = () => {
   const location = useLocation();
   const isSignup = location.pathname === "/signup";
   const isSignin = location.pathname === "/signin";
+  const { signInWithGoogle, signInWithGitHub } = useAuthStore();
+
+  const handleSigninWithGoogle = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSigninWithGitHub = async () => {
+    try {
+      await signInWithGitHub();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -18,12 +36,12 @@ const AuthButtons = () => {
       </div>
 
       {/* Google */}
-      <Button className="max-[500px]:text-xs">
+      <Button onClick={handleSigninWithGoogle} className="max-[500px]:text-xs">
         <FcGoogle size={20} /> Continue with Google
       </Button>
 
       {/* Github */}
-      <Button className="max-[500px]:text-xs">
+      <Button onClick={handleSigninWithGitHub} className="max-[500px]:text-xs">
         <IoLogoGithub size={20} /> Continue with GitHub
       </Button>
 

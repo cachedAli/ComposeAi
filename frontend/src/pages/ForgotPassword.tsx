@@ -2,6 +2,7 @@ import EmailSent from "@/components/layouts/auth/EmailSent";
 import Form from "@/components/ui/Form";
 import { forgotPasswordFields } from "@/libs/constants/authConstants";
 import { forgotPasswordSchema } from "@/libs/schema/authSchema";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,10 +12,15 @@ type Data = {
 
 const ForgotPassword = () => {
   const [emailSent, setEmailSent] = useState(false);
+  const { forgotPassword } = useAuthStore();
 
-  const handleSubmit = (data: Data) => {
-    console.log(data);
-    setEmailSent(true);
+  const handleSubmit = async (data: Data) => {
+    const success = await forgotPassword(data);
+
+    if (success) {
+      setEmailSent(true);
+    }
+    return;
   };
 
   const navigate = useNavigate();

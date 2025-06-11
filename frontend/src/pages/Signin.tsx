@@ -1,16 +1,23 @@
+import { useNavigate } from "react-router-dom";
+
 import { signinFields } from "@/libs/constants/authConstants";
 import { signinSchema } from "@/libs/schema/authSchema";
 import AuthButtons from "@/components/ui/AuthButtons";
+import { useAuthStore } from "@/store/useAuthStore";
+import type { SigninData } from "@/types/authTypes";
 import Form from "@/components/ui/Form";
 
-type Data = {
-  email: string;
-  password: string;
-};
-
 const Signin = () => {
-  const handleSubmit = (data: Data) => {
-    console.log(data);
+  const { signin } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (data: SigninData) => {
+    const success = await signin(data);
+
+    if (success) {
+      navigate("/email-assistant");
+    }
+    return;
   };
 
   return (

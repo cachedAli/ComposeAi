@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { resetPasswordFields } from "@/libs/constants/authConstants";
 import { resetPasswordSchema } from "@/libs/schema/authSchema";
 import Form from "@/components/ui/Form";
+import { supabase } from "@/libs/supabaseClient";
+import { toast } from "sonner";
 
 type Data = {
   password: string;
@@ -17,8 +19,33 @@ const ResetPassword = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (data: Data) => {
-    console.log(data);
+  useEffect(() => {
+    const hash = window.location.hash;
+    const pathName = window.location.pathname;
+
+    if (pathName === "/reset-password" && hash.includes("access_token")) {
+      // automatically sets the session
+      supabase.auth.getSession().then(({ error }) => {
+        if (error) {
+          toast.error("Session error: " + error.message);
+        }
+      });
+    }
+  }, []);
+
+  const handleSubmit = async (data: Data) => {
+    const { confirmPassword } = data;
+
+    const { error } = await supabase.auth.updateUser({
+      password: confirmPassword,
+    });
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    toast.success("Password changed successfully!");
 
     setMessage("Redirecting in ");
     setIsRedirecting(true);

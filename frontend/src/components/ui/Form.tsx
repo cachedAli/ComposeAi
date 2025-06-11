@@ -40,8 +40,12 @@ const Form = ({
   });
 
   const handleFormSubmit = async (data: any) => {
-    await onSubmit(data);
-    reset();
+    const shouldReset = await onSubmit({
+      ...data,
+    });
+    if (shouldReset) {
+      reset();
+    }
   };
   return (
     <form
