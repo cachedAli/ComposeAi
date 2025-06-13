@@ -8,17 +8,32 @@ import { Route, Routes } from "react-router-dom";
 import AuthRedirectHandler from "./AuthRedirectHandler";
 import EmailAssistantPage from "@/components/layouts/assistant/EmailAssistantPage";
 import VerifyEmail from "@/pages/VerifyEmail";
+import PublicRoute from "./PublicRoute";
 
 const Router = () => {
   return (
     <Routes>
       {/* Home */}
-      <Route path="/" element={<Homepage />} />
+      <Route
+        path="/"
+        element={
+          <PublicRoute>
+            <Homepage />
+          </PublicRoute>
+        }
+      />
 
+      {/* Callback */}
       <Route path="/auth/callback" element={<AuthRedirectHandler />} />
 
       {/* Auth */}
-      <Route element={<AuthLayout />}>
+      <Route
+        element={
+          <PublicRoute>
+            <AuthLayout />
+          </PublicRoute>
+        }
+      >
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/verify-email" element={<VerifyEmail />} />

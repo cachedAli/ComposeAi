@@ -4,12 +4,18 @@ import clsx from "clsx";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
+import { useUserStore } from "@/store/useUserStore";
 import composeAi from "/composeAi.png";
 import Button from "../ui/Button";
+import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
 
-const Header = ({ isHero }: { isHero?: boolean }) => {
+type HeaderProps = {
+  isHero?: boolean;
+  isAssistant?: boolean;
+};
+
+const Header = ({ isHero, isAssistant = false }: HeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
   return (
     <header className={clsx("fixed top-0 left-0 w-full mt-4 px-8 z-50")}>
@@ -20,30 +26,23 @@ const Header = ({ isHero }: { isHero?: boolean }) => {
             isHero ? "border border-gray-700 shadow-md" : "border-transparent"
           )}
         >
-          {/* Hamburger Menu - only on small screens */}
-          <div className="sm:hidden">
-            <button onClick={() => setMenuOpen(!menuOpen)}>
-              {menuOpen ? <X /> : <Menu />}
-            </button>
-          </div>
+          {!isAssistant && (
+            /* Hamburger Menu - only on small screens */
+            <div className="sm:hidden">
+              <button onClick={() => setMenuOpen(!menuOpen)}>
+                {menuOpen ? <X /> : <Menu />}
+              </button>
+            </div>
+          )}
 
           {/* Logo + Nav (hidden on small screens) */}
-          <Nav />
+          <Nav isAssistant={isAssistant} />
 
-          {/* Sign in Button */}
-          <div>
-            <Button
-              onClick={() => navigate("/signin")}
-              variant="primary"
-              className="h-10 max-[400px]:text-xs"
-            >
-              Sign in
-            </Button>
-          </div>
+          <Buttons />
         </div>
 
         {/* Mobile Nav Dropdown */}
-        {menuOpen && <MobileNav />}
+        {!isAssistant && menuOpen && <MobileNav />}
       </div>
     </header>
   );
@@ -51,7 +50,7 @@ const Header = ({ isHero }: { isHero?: boolean }) => {
 
 export default Header;
 
-const Nav = () => {
+const Nav = ({ isAssistant }: { isAssistant?: boolean }) => {
   return (
     <nav className="flex items-center gap-10">
       {/* Logo */}
@@ -60,19 +59,21 @@ const Nav = () => {
       </Link>
 
       {/* Nav items */}
-      <ul className="flex gap-6 text-sm text-gray-200 max-sm:hidden">
-        <a href="#features">
-          <li className="hover:text-cyan-500 cursor-pointer transition-colors">
-            Features
-          </li>
-        </a>
+      {!isAssistant && (
+        <ul className="flex gap-6 text-sm text-gray-200 max-sm:hidden">
+          <a href="#features">
+            <li className="hover:text-cyan-500 cursor-pointer transition-colors">
+              Features
+            </li>
+          </a>
 
-        <a href="#howItWorks">
-          <li className="hover:text-cyan-500 cursor-pointer transition-colors">
-            How it Works
-          </li>
-        </a>
-      </ul>
+          <a href="#howItWorks">
+            <li className="hover:text-cyan-500 cursor-pointer transition-colors">
+              How it Works
+            </li>
+          </a>
+        </ul>
+      )}
     </nav>
   );
 };
@@ -98,5 +99,35 @@ const MobileNav = () => {
         </a>
       </ul>
     </nav>
+  );
+};
+
+const Buttons = () => {
+  const {setLogout} = useEmailAssistantStore();
+  const { user } = useUserStore();
+  const navigate = useNavigate();
+  console.log(user);
+  return (
+    <div>
+      {!user ? (
+        /* Sign in Button */
+        <Button
+          onClick={() => navigate("/signin")}
+          variant="primary"
+          className="h-10 max-[400px]:text-xs"
+        >
+          Sign in
+        </Button>
+      ) : (
+        // Logout Button
+        <Button
+          onClick={()=>setLogout(true)}
+          variant="primary"
+          className="h-10 max-[400px]:text-xs"
+        >
+          Logout
+        </Button>
+      )}
+    </div>
   );
 };

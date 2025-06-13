@@ -7,6 +7,7 @@ import type { ZodSchema } from "zod";
 
 import type { FormField } from "@/types/formTypes";
 import InputField from "./InputField";
+import { cn } from "@/libs/utils";
 import Button from "./Button";
 
 type FormProps = {
@@ -15,6 +16,7 @@ type FormProps = {
   onSubmit: (data: any) => void | Promise<any>;
   buttonLabel?: string;
   backButtonLabel?: string;
+  buttonsClassName?: string;
   backButtonOnClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 } & Pick<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -27,6 +29,7 @@ const Form = ({
   buttonLabel = "Submit",
   backButtonLabel,
   backButtonOnClick,
+  buttonsClassName,
   ...buttonProps
 }: FormProps) => {
   const {
@@ -78,6 +81,7 @@ const Form = ({
         backButtonLabel={backButtonLabel}
         buttonProps={buttonProps}
         backButtonOnClick={backButtonOnClick}
+        buttonsClassName={buttonsClassName}
       />
     </form>
   );
@@ -93,6 +97,7 @@ type ButtonsProps = {
   backButtonOnClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   buttonLabel: string;
   backButtonLabel?: string;
+  buttonsClassName?: string;
 };
 
 const Buttons = ({
@@ -100,9 +105,10 @@ const Buttons = ({
   buttonLabel,
   backButtonLabel,
   backButtonOnClick,
+  buttonsClassName,
 }: ButtonsProps) => {
   return (
-    <div className="flex flex-col gap-3 col-span-2">
+    <div className={cn("flex flex-col w-full gap-3 col-span-2", buttonsClassName)}>
       <Button
         type="submit"
         {...buttonProps}

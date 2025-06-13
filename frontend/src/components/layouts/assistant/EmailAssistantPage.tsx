@@ -1,28 +1,36 @@
-import Button from "@/components/ui/Button";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect } from "react";
+
 import { useUserStore } from "@/store/useUserStore";
-import { useNavigate } from "react-router-dom";
+import AssistantChat from "./AssistantChat";
+import Header from "../Header";
+import AssistantMessages from "./AssistantMessages";
+import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
+import clsx from "clsx";
+import AssistantOverlay from "./AssistantOverlay";
 
 const EmailAssistantPage = () => {
-  const user = useUserStore((state) => state.user);
-  const { logout } = useAuthStore();
-  const navigate = useNavigate();
+  const { fetchUser } = useUserStore();
+  const { messages } = useEmailAssistantStore();
 
-  const handleLogout = async () => {
-    await logout();
-    navigate("/signin");
-  };
+  const noMessages = messages.length === 0;
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return (
-    <div className="flex">
-      <img
-        src={user?.profilePic}
-        alt=""
-        className="w-12 h-12 rounded-full object-cover"
-      />
-      {user?.firstName}
-      {user?.lastName}
-      <Button onClick={handleLogout}>Logout</Button>
+    <div
+      className={clsx(
+        "flex flex-col items-center justify-between h-screen px-6 py-4 font-outfit",
+        noMessages ? "pb-40" : ""
+      )}
+    >
+      <Header isAssistant />
+      <div className="flex-1 w-full overflow-y-auto px-4 py-2 space-y-4 scroll-smooth">
+        <AssistantMessages />
+      </div>
+      <AssistantChat />
+      <AssistantOverlay />
     </div>
   );
 };

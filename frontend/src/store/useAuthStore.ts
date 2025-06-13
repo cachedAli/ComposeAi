@@ -4,6 +4,7 @@ import type { SigninData, SignupData } from "@/types/authTypes";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { useUserStore } from "./useUserStore";
+import type { User } from "@/types/userTypes";
 
 type AuthState = {
     signInWithGoogle: () => Promise<any>;
@@ -12,6 +13,7 @@ type AuthState = {
     signin: (userData: SigninData) => Promise<boolean>;
     logout: () => Promise<void>;
     forgotPassword: (userData: { email: string }) => Promise<boolean>;
+    checkAuth: () => Promise<User | null>;
 }
 
 export const useAuthStore = create<AuthState>(() => ({
@@ -157,5 +159,17 @@ export const useAuthStore = create<AuthState>(() => ({
             console.log(error);
             return false;
         }
+    },
+    checkAuth: async () => {
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error || !data?.user) {
+            useUserStore.getState().setUser(null);
+            return null;
+        }
+
+        const newUser = createUserObject(data?.user);
+        useUserStore.getState().setUser(newUser);
+        return newUser;
     }
 }))

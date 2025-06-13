@@ -1,3 +1,4 @@
+import { AnimatedLogo } from "@/components/ui/logo/AnimatedLogo";
 import { supabase } from "@/libs/supabaseClient";
 import { capitalizeFirstLetter, createUserObject } from "@/libs/utils";
 import { useUserStore } from "@/store/useUserStore";
@@ -34,7 +35,12 @@ const AuthRedirectHandler = () => {
     getUser();
   }, [navigate]);
 
-  return <div>AuthRedirectHandler</div>;
+  return (
+    <div className="flex items-center justify-center h-screen">
+      {" "}
+      <AnimatedLogo home={false} />
+    </div>
+  );
 };
 
 export default AuthRedirectHandler;

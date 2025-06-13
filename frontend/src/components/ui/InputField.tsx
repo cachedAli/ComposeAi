@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import type { FormField } from "@/types/formTypes";
@@ -9,6 +9,7 @@ import {
   type UseControllerReturn,
 } from "react-hook-form";
 import { Link, useLocation } from "react-router-dom";
+import { useUserStore } from "@/store/useUserStore";
 
 const InputField = ({
   label,
@@ -52,8 +53,18 @@ type InputProps = {
 
 const Input = ({ field, name, type, error, placeholder }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const { user } = useUserStore();
   const location = useLocation();
   const isSignin = location.pathname === "/signin";
+  const isSendEmail = name === "emailFrom";
+
+  const defaultEmail = user && isSendEmail ? user.email ?? "" : "";
+  const [inputValue, setInputValue] = useState(field.value || defaultEmail);
+
+  useEffect(() => {
+    field.onChange(defaultEmail);
+  }, []);
 
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -64,6 +75,11 @@ const Input = ({ field, name, type, error, placeholder }: InputProps) => {
       <input
         {...field}
         id={name}
+        value={inputValue}
+        onChange={(e) => {
+          setInputValue(e.target.value);
+          field.onChange(e);
+        }}
         type={type === "password" ? (showPassword ? "text" : "password") : type}
         placeholder={placeholder}
         className={clsx(

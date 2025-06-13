@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 import { Zap } from "lucide-react";
 
-import { AnimatedLogo } from "@/components/ui/AnimatedLogo";
+import { AnimatedLogo } from "@/components/ui/logo/AnimatedLogo";
 import Button from "../../ui/Button";
 
 const HeroSection = () => {
@@ -64,7 +64,7 @@ const HeroImg = () => {
       <span className="h-[500px] w-[1000px] bg-gray-800 z-10 rounded-2xl text-4xl flex items-center justify-center">
         Image Placeholder
       </span>
-      <AnimatedLogo/>
+      <AnimatedLogo />
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import clsx from "clsx";
 
-import { AnimatedLogo } from "@/components/ui/AnimatedLogo";
+import { AnimatedLogo } from "@/components/ui/logo/AnimatedLogo";
 import { capitalizeFirstLetter } from "@/libs/utils";
 import Button from "@/components/ui/Button";
 
