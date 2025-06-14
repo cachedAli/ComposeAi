@@ -9,6 +9,7 @@ import type { FormField } from "@/types/formTypes";
 import InputField from "./InputField";
 import { cn } from "@/libs/utils";
 import Button from "./Button";
+import Loader from "./Loader";
 
 type FormProps = {
   fields: FormField[];
@@ -17,6 +18,7 @@ type FormProps = {
   buttonLabel?: string;
   backButtonLabel?: string;
   buttonsClassName?: string;
+  loading?: boolean;
   backButtonOnClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 } & Pick<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -30,6 +32,7 @@ const Form = ({
   backButtonLabel,
   backButtonOnClick,
   buttonsClassName,
+  loading,
   ...buttonProps
 }: FormProps) => {
   const {
@@ -82,6 +85,7 @@ const Form = ({
         buttonProps={buttonProps}
         backButtonOnClick={backButtonOnClick}
         buttonsClassName={buttonsClassName}
+        loading={loading}
       />
     </form>
   );
@@ -98,6 +102,7 @@ type ButtonsProps = {
   buttonLabel: string;
   backButtonLabel?: string;
   buttonsClassName?: string;
+  loading?: boolean;
 };
 
 const Buttons = ({
@@ -106,16 +111,20 @@ const Buttons = ({
   backButtonLabel,
   backButtonOnClick,
   buttonsClassName,
+  loading,
 }: ButtonsProps) => {
   return (
-    <div className={cn("flex flex-col w-full gap-3 col-span-2", buttonsClassName)}>
+    <div
+      className={cn("flex flex-col w-full gap-3 col-span-2", buttonsClassName)}
+    >
       <Button
         type="submit"
         {...buttonProps}
         variant="secondary"
         className="col-span-2"
+        disabled={loading}
       >
-        {buttonLabel}
+        {loading ? <Loader /> : buttonLabel}
       </Button>
 
       {backButtonLabel && (

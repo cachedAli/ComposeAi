@@ -1,12 +1,16 @@
-import { AnimatedLogo } from "@/components/ui/logo/AnimatedLogo";
-import { supabase } from "@/libs/supabaseClient";
-import { capitalizeFirstLetter, createUserObject } from "@/libs/utils";
-import { useUserStore } from "@/store/useUserStore";
 import { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+import { capitalizeFirstLetter, createUserObject } from "@/libs/utils";
+import { AnimatedLogo } from "@/components/ui/logo/AnimatedLogo";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useUserStore } from "@/store/useUserStore";
+import { supabase } from "@/libs/supabaseClient";
+
 const AuthRedirectHandler = () => {
+  const { setGoogleLoading, setGithubLoading } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,9 +31,11 @@ const AuthRedirectHandler = () => {
 
       useUserStore.getState().setUser(newUser);
 
+      setGoogleLoading(false);
+      setGithubLoading(false);
+
       toast.success(`Welcome ${capitalizeFirstLetter(fullName)}`);
 
-      console.log(user);
       navigate("/email-assistant");
     };
     getUser();

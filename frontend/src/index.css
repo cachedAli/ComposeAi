@@ -45,3 +45,14 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
+
+@media (max-width: 640px) {
+  .no-scrollbar-sm {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar-sm::-webkit-scrollbar {
+    display: none;
+  }
+}

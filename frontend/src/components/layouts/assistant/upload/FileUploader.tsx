@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
 export const FileUploader = () => {
-  const { setFile } = useEmailAssistantStore();
+  const setFile = useEmailAssistantStore((state)=>state.setFile);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {

@@ -8,7 +8,7 @@ import type { SigninData } from "@/types/authTypes";
 import Form from "@/components/ui/Form";
 
 const Signin = () => {
-  const { signin } = useAuthStore();
+  const { signin, signinLoading } = useAuthStore();
   const navigate = useNavigate();
 
   const handleSubmit = async (data: SigninData) => {
@@ -27,6 +27,7 @@ const Signin = () => {
         schema={signinSchema}
         onSubmit={handleSubmit}
         buttonLabel="Signin"
+        loading={signinLoading}
       />
 
       <AuthButtons />

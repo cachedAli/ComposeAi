@@ -1,14 +1,18 @@
 import AuthLayout from "@/components/layouts/auth/AuthLayout";
-import ForgotPassword from "@/pages/ForgotPassword";
 import Homepage from "@/pages/Homepage";
-import ResetPassword from "@/pages/ResetPassword";
-import Signin from "@/pages/Signin";
-import Signup from "@/pages/Signup";
 import { Route, Routes } from "react-router-dom";
 import AuthRedirectHandler from "./AuthRedirectHandler";
-import EmailAssistantPage from "@/components/layouts/assistant/EmailAssistantPage";
-import VerifyEmail from "@/pages/VerifyEmail";
 import PublicRoute from "./PublicRoute";
+import NotFoundPage from "./NotFound";
+import LazyLoader from "@/libs/LazyLoader";
+import {
+  EmailAssistantPage,
+  ForgotPassword,
+  ResetPassword,
+  Signin,
+  Signup,
+  VerifyEmail,
+} from "./lazyRoutes";
 
 const Router = () => {
   return (
@@ -22,6 +26,7 @@ const Router = () => {
           </PublicRoute>
         }
       />
+      <Route path="*" element={<NotFoundPage />} />
 
       {/* Callback */}
       <Route path="/auth/callback" element={<AuthRedirectHandler />} />
@@ -34,15 +39,57 @@ const Router = () => {
           </PublicRoute>
         }
       >
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route
+          path="/signup"
+          element={
+            <LazyLoader>
+              <Signup />
+            </LazyLoader>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <LazyLoader>
+              <Signin />
+            </LazyLoader>
+          }
+        />
+        <Route
+          path="/verify-email"
+          element={
+            <LazyLoader>
+              <VerifyEmail />
+            </LazyLoader>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <LazyLoader>
+              <ForgotPassword />
+            </LazyLoader>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <LazyLoader> 
+              <ResetPassword />
+            </LazyLoader>
+          }
+        />
       </Route>
 
       {/* Email Assistant */}
-      <Route path="/email-assistant" element={<EmailAssistantPage />} />
+      <Route
+        path="/email-assistant"
+        element={
+          <LazyLoader>
+            <EmailAssistantPage />
+          </LazyLoader>
+        }
+      />
     </Routes>
   );
 };

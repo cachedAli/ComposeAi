@@ -8,12 +8,14 @@ import { resetPasswordSchema } from "@/libs/schema/authSchema";
 import Form from "@/components/ui/Form";
 import { supabase } from "@/libs/supabaseClient";
 import { toast } from "sonner";
+import { useAuthStore } from "@/store/useAuthStore";
 
 type Data = {
   password: string;
   confirmPassword: string;
 };
 const ResetPassword = () => {
+  const { setResetPasswordLoading, resetPasswordLoading } = useAuthStore();
   const [countdown, setCountdown] = useState(5);
   const [message, setMessage] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -36,15 +38,18 @@ const ResetPassword = () => {
   const handleSubmit = async (data: Data) => {
     const { confirmPassword } = data;
 
+    setResetPasswordLoading(true);
     const { error } = await supabase.auth.updateUser({
       password: confirmPassword,
     });
 
     if (error) {
+      setResetPasswordLoading(false);
       toast.error(error.message);
       return;
     }
 
+    setResetPasswordLoading(false);
     toast.success("Password changed successfully!");
 
     setMessage("Redirecting in ");
@@ -56,7 +61,7 @@ const ResetPassword = () => {
 
     setTimeout(() => {
       clearInterval(interval);
-      navigate("/signin");
+      navigate("/email-assistant");
     }, 5000);
   };
 
@@ -68,6 +73,7 @@ const ResetPassword = () => {
         onSubmit={handleSubmit}
         buttonLabel="Continue"
         disabled={isRedirecting}
+        loading={resetPasswordLoading}
       />
       <RedirectMessage countdown={countdown} message={message} />
     </div>

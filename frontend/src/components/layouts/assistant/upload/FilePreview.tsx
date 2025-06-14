@@ -2,7 +2,7 @@ import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
 import { FileThumbPreview, ImageThumbPreview } from "./FileThumbnails";
 
 const FilePreview = () => {
-  const { file } = useEmailAssistantStore();
+  const file = useEmailAssistantStore((state)=>state.file);
 
   return (
     <div className="absolute top-3 left-3 ">

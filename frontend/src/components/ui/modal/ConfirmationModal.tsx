@@ -4,10 +4,12 @@ import Form from "../Form";
 import type { FormField } from "@/types/formTypes";
 import type { ZodSchema } from "zod";
 import Button from "../Button";
+import Loader from "../Loader";
 
 type BaseProps = {
   title: string;
   description: string;
+  loading?: boolean;
   backButtonOnClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
@@ -59,12 +61,13 @@ const ConfirmationModal = ({ ...props }: ConfirmationModalProps) => {
             backButtonLabel="Cancel"
             buttonsClassName=" flex-row-reverse mt-2"
             buttonLabel="Send Email"
+            loading={props.loading}
           />
         ) : (
           <div className="flex gap-3 mt-2 w-full">
             <Button onClick={props.backButtonOnClick}>Cancel</Button>
-            <Button variant="secondary" onClick={props.onClick}>
-              Logout
+            <Button disabled={props.loading} variant="secondary" onClick={props.onClick}>
+              {props.loading ? <Loader/> : "Logout"}
             </Button>
           </div>
         )}

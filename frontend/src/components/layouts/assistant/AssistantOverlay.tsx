@@ -10,7 +10,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 const AssistantOverlay = () => {
   const { setSendEmail, setLogout, isLogout, isSendEmail } =
     useEmailAssistantStore();
-  const { logout } = useAuthStore();
+  const { logout, logoutLoading } = useAuthStore();
 
   const navigate = useNavigate();
 
@@ -34,6 +34,7 @@ const AssistantOverlay = () => {
           description="Are you sure you want to log out?"
           onClick={handleLogout}
           backButtonOnClick={() => setLogout(false)}
+          loading={logoutLoading}
         />
       )}
       {isSendEmail && (

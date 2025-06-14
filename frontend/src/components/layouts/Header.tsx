@@ -18,12 +18,18 @@ const Header = ({ isHero, isAssistant = false }: HeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className={clsx("fixed top-0 left-0 w-full mt-4 px-8 z-50")}>
+    <header
+      className={clsx(
+        "fixed top-0 left-0 w-full px- z-50",
+        isAssistant ? "px-8 max-sm:px-2 mt-2 max-sm:mt-0" : "px-8 mt-4"
+      )}
+    >
       <div className="relative">
         <div
           className={clsx(
-            "w-full rounded-xl py-2 px-4 h-16 flex items-center border justify-between bg-[#0d0d0d] transition-colors duration-300",
-            isHero ? "border border-gray-700 shadow-md" : "border-transparent"
+            "w-full rounded-xl py-2 h-16 flex items-center border justify-between bg-[#0d0d0d] transition-colors duration-300",
+            isHero ? "border border-gray-700 shadow-md" : "border-transparent",
+            isAssistant ? "px-0" : "px-4"
           )}
         >
           {!isAssistant && (
@@ -103,7 +109,7 @@ const MobileNav = () => {
 };
 
 const Buttons = () => {
-  const {setLogout} = useEmailAssistantStore();
+  const { setLogout } = useEmailAssistantStore();
   const { user } = useUserStore();
   const navigate = useNavigate();
   console.log(user);
@@ -121,7 +127,7 @@ const Buttons = () => {
       ) : (
         // Logout Button
         <Button
-          onClick={()=>setLogout(true)}
+          onClick={() => setLogout(true)}
           variant="primary"
           className="h-10 max-[400px]:text-xs"
         >

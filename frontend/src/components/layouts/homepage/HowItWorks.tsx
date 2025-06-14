@@ -7,7 +7,7 @@ const HowItWorks = () => {
   return (
     <section
       id="howItWorks"
-      className="flex items-center justify-center flex-col gap-6 py-6 px-2 text-center"
+      className="flex items-center justify-center flex-col gap-6 py-6 px-2 text-center max-w-screen-2xl mx-auto"
     >
       {/* Tagline */}
       <span className="border border-t-cyan-500 border-r-cyan-500 border-l-indigo-500 border-b-indigo-500 py-2 px-4 rounded-full text-sm flex items-center gap-2">
@@ -60,21 +60,9 @@ const HowItWorksCard = ({ steps, i }: { steps: any; i: number }) => {
       <div className="relative w-[200px] h-[200px] flex items-center justify-center">
         <steps.icon
           size={200}
-          className="text-cyan-500 group-hover:text-cyan-300 z-10 transition duration-300"
+          className="text-cyan-500 z-10 transition duration-300 group-hover:animate-pulse"
         />
-
-        {/* Gradient overlays */}
-        <GradientOverlays />
       </div>
     </motion.div>
-  );
-};
-
-const GradientOverlays = () => {
-  return (
-    <>
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-indigo-500 to-emerald-500 rounded-lg blur-xl opacity-0 group-hover:opacity-70 transform -rotate-6 scale-105 transition duration-300"></div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 via-indigo-500 to-emerald-400 rounded-lg blur-xl opacity-0 group-hover:opacity-70 transform rotate-6 scale-105 transition duration-300"></div>
-    </>
   );
 };

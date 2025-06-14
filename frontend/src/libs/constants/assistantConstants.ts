@@ -1,5 +1,5 @@
 import type { FormField } from "@/types/formTypes";
-import { Languages, Smile, SpellCheck, Wand2, type LucideIcon } from "lucide-react";
+import { BriefcaseBusiness, Scissors, ShieldCheck, Smile, SpellCheck, type LucideIcon } from "lucide-react";
 
 
 export const sendEmailFields: FormField[] = [
@@ -9,29 +9,40 @@ export const sendEmailFields: FormField[] = [
 
 type QuickAction = {
     label: string;
-    icon: LucideIcon; // Store the component, not JSX
+    icon: LucideIcon;
     onClick: () => void;
+    color?: string
 };
 
 export const quickActions: QuickAction[] = [
     {
         label: "Formal",
-        icon: Wand2,
+        icon: BriefcaseBusiness,
         onClick: () => console.log("Formal clicked"),
+        color: "#05ceec"
     },
     {
         label: "Casual",
         icon: Smile,
         onClick: () => console.log("Casual clicked"),
+        color: "#ecb505"
+    },
+    {
+        label: "Confident",
+        icon: ShieldCheck,
+        onClick: () => console.log("Confident clicked"),
+        color: "#FF6B00"
     },
     {
         label: "Fix Grammar",
         icon: SpellCheck,
         onClick: () => console.log("Fix Grammar clicked"),
+        color: "#05ec13"
     },
     {
-        label: "Translate",
-        icon: Languages,
+        label: "Shorten",
+        icon: Scissors,
         onClick: () => console.log("Translate clicked"),
+        color: "#ff272c"
     },
 ];

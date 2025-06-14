@@ -1,10 +1,12 @@
-import EmailSent from "@/components/layouts/auth/EmailSent";
-import Form from "@/components/ui/Form";
+import { useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
 import { forgotPasswordFields } from "@/libs/constants/authConstants";
 import { forgotPasswordSchema } from "@/libs/schema/authSchema";
+import EmailSent from "@/components/layouts/auth/EmailSent";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Form from "@/components/ui/Form";
 
 type Data = {
   email: string;
@@ -12,7 +14,7 @@ type Data = {
 
 const ForgotPassword = () => {
   const [emailSent, setEmailSent] = useState(false);
-  const { forgotPassword } = useAuthStore();
+  const { forgotPassword, forgotPasswordLoading } = useAuthStore();
 
   const handleSubmit = async (data: Data) => {
     const success = await forgotPassword(data);
@@ -34,6 +36,7 @@ const ForgotPassword = () => {
           buttonLabel="Send verification code"
           backButtonLabel="Back to Login"
           backButtonOnClick={() => navigate("/signin")}
+          loading={forgotPasswordLoading}
         />
       ) : (
         <EmailSent />

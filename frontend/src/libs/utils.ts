@@ -30,7 +30,7 @@ export const createUserObject = (user: any) => {
         firstName: firstName || meta.firstName,
         lastName: lastName || meta.lastName,
         email: user.email ?? "",
-        profilePic: meta.avatar_url
+        profilePic: meta.avatar_url ?? undefined
 
     }
 }

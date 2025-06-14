@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { House } from "lucide-react";
 import clsx from "clsx";
 
 import { AnimatedLogo } from "@/components/ui/logo/AnimatedLogo";
@@ -21,13 +21,14 @@ const AuthLayout = () => {
       {location.pathname !== "/reset-password" && (
         <div className="w-full ">
           <Button
+            variant="secondary"
             className={clsx(
-              "w-24 h-10 text-sm absolute top-14 left-4 p-2",
+              "w-24 h-10 text-sm absolute top-14 left-4 p-2 rounded-full to-indigo-500",
               "max-sm:w-20 max-sm:text-xs"
             )}
             onClick={() => navigate("/")}
           >
-            <ArrowLeft size={16} /> Home
+            <House size={16} /> Home
           </Button>
         </div>
       )}

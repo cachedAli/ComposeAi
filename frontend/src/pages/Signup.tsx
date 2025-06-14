@@ -10,12 +10,12 @@ import { toast } from "sonner";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { signup } = useAuthStore();
+  const { signup, signupLoading } = useAuthStore();
 
   const handleSubmit = async (data: SignupData) => {
-  try {
+    try {
       const success = await signup(data);
-      if ( success) {
+      if (success) {
         navigate("/verify-email");
       } else if (!success) {
         toast.error("Signup failed. Please try again.");
@@ -32,6 +32,7 @@ const Signup = () => {
         schema={signupSchema}
         onSubmit={handleSubmit}
         buttonLabel="Signup"
+        loading={signupLoading}
       />
 
       <AuthButtons />

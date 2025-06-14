@@ -4,12 +4,16 @@ import { FcGoogle } from "react-icons/fc";
 
 import Button from "./Button";
 import { useAuthStore } from "@/store/useAuthStore";
+import Loader from "./Loader";
 
 const AuthButtons = () => {
   const location = useLocation();
   const isSignup = location.pathname === "/signup";
   const isSignin = location.pathname === "/signin";
-  const { signInWithGoogle, signInWithGitHub } = useAuthStore();
+  const { signInWithGoogle, signInWithGitHub, githubLoading, googleLoading } =
+    useAuthStore();
+
+  console.log(googleLoading);
 
   const handleSigninWithGoogle = async () => {
     try {
@@ -36,13 +40,34 @@ const AuthButtons = () => {
       </div>
 
       {/* Google */}
-      <Button onClick={handleSigninWithGoogle} className="max-[500px]:text-xs">
-        <FcGoogle size={20} /> Continue with Google
+      <Button
+        disabled={googleLoading}
+        onClick={handleSigninWithGoogle}
+        className="max-[500px]:text-xs"
+      >
+        {googleLoading ? (
+          <Loader color="primary" />
+        ) : (
+          <>
+            <FcGoogle size={20} /> Continue with Google
+          </>
+        )}
       </Button>
 
       {/* Github */}
-      <Button onClick={handleSigninWithGitHub} className="max-[500px]:text-xs">
-        <IoLogoGithub size={20} /> Continue with GitHub
+      <Button
+        disabled={githubLoading}
+        onClick={handleSigninWithGitHub}
+        className="max-[500px]:text-xs"
+      >
+        {githubLoading ? (
+          <Loader color="primary" />
+        ) : (
+          <>
+            {" "}
+            <IoLogoGithub size={20} /> Continue with GitHub
+          </>
+        )}
       </Button>
 
       {isSignup ? (

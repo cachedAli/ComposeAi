@@ -37,7 +37,7 @@ const Button = ({
       className={cn(
         baseStyles,
         variants[variant],
-        disabled && "opacity-50 cursor-not-allowed pointer-events-none",
+        disabled && "opacity-85 cursor-not-allowed pointer-events-none",
         className
       )}
       {...props}

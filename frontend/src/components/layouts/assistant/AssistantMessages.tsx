@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { FileThumbPreview, ImageThumbPreview } from "./upload/FileThumbnails";
 
 const AssistantMessages = () => {
-  const { messages } = useEmailAssistantStore();
+  const messages = useEmailAssistantStore((state) => state.messages);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,7 +24,8 @@ const AssistantMessages = () => {
     <div
       className={clsx(
         "flex flex-col gap-10 w-full max-w-[800px] mx-auto",
-        messages.length !== 0 ? " mt-16" : ""
+        messages.length !== 0 ? " mt-16" : "",
+        "max-lg:w-full"
       )}
     >
       {messages.map((msg, index) => (
@@ -57,8 +58,16 @@ const MessageBubble = ({
   const [isEditing, setIsEditing] = useState(false);
   const [newContent, setNewContent] = useState(content);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { editMessage } = useEmailAssistantStore();
+  const editMessage = useEmailAssistantStore((state) => state.editMessage);
   const isImage = file?.type?.startsWith("image/");
+
+  useEffect(() => {
+    if (isEditing && textAreaRef.current) {
+      const cursor = textAreaRef.current;
+      cursor.focus();
+      cursor.selectionStart = cursor.selectionEnd = cursor.value.length;
+    }
+  }, [isEditing]);
 
   const handleSend = () => {
     editMessage(msgId, newContent.trim());
@@ -79,30 +88,44 @@ const MessageBubble = ({
       )}
     >
       {isEditing ? (
-        <div className="relative">
-          <textarea
-            ref={textAreaRef}
-            value={newContent}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                if (!newContent.trim()) return;
-                handleSend();
-              }
-            }}
-            onChange={(e) => setNewContent(e.target.value)}
-            className={clsx(
-              "bg-neutral-800 border border-neutral-600 rounded-2xl resize-none outline-none py-3 px-4 pb-16 overflow-hidden transition-colors duration-300 w-[500px]",
-              "hover:border-neutral-500",
-              "focus:border-neutral-500"
-            )}
-          />
-          <EditTextAreaActionButtons
-            value={newContent}
-            handleSend={handleSend}
-            handleCancel={handleCancel}
-          />
-        </div>
+        <>
+          {file &&
+            (isImage ? (
+              <div className="flex justify-end">
+                <ImageThumbPreview file={file} isChatArea />
+              </div>
+            ) : (
+              <div className="flex justify-end">
+                <FileThumbPreview file={file} isChatArea />
+              </div>
+            ))}
+          <div className="relative max-sm:w-full">
+            <textarea
+              ref={textAreaRef}
+              value={newContent}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  if (!newContent.trim()) return;
+                  handleSend();
+                }
+              }}
+              onChange={(e) => setNewContent(e.target.value)}
+              className={clsx(
+                "bg-neutral-800 border border-neutral-600 rounded-2xl resize-none outline-none py-3 px-4 pb-16 overflow-hidden transition-colors duration-300 w-[500px]",
+                "hover:border-neutral-500",
+                "focus:border-neutral-500",
+                "max-lg:w-[600px]",
+                "max-sm:w-full"
+              )}
+            />
+            <EditTextAreaActionButtons
+              value={newContent}
+              handleSend={handleSend}
+              handleCancel={handleCancel}
+            />
+          </div>
+        </>
       ) : (
         <>
           {file &&
@@ -123,8 +146,9 @@ const MessageBubble = ({
                 isUser ? "bg-blue-600 text-white" : "bg-neutral-700 text-white",
                 !file
                   ? "rounded-xl mt-2"
-                  : "rounded-b-full rounded-tl-full rounded-tr-2xl mt-0 px-5",
-                file && content.length < 50 && "max-w-fit self-end"
+                  : "rounded-b-full rounded-tl-full rounded-tr-2xl -mt-1 px-5",
+                file && content.length < 50 && "max-w-fit md:self-end",
+                file && content.length < 20 && "max-sm:self-end"
               )}
             >
               {content}
@@ -147,7 +171,7 @@ const UserAvatar = ({ src }: { src: string }) => (
   <div className="flex-shrink-0 size-8 object-contain pointer-events-none">
     <img
       src={src}
-      alt="user"
+      alt=""
       className="w-full h-full object-contain rounded-full"
     />
   </div>
@@ -168,7 +192,7 @@ const MessageRow = ({
 }) => {
   const isAssistant = msg.role === "assistant";
   const isUser = msg.role === "user";
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
 
   return (
     <div
@@ -210,8 +234,8 @@ const MessageActionButtons = ({
   setIsEditing?: (val: boolean) => void;
 }) => {
   const [copied, setCopied] = useState(false);
-  const { setSendEmail } = useEmailAssistantStore();
-  const { user } = useUserStore();
+  const setSendEmail = useEmailAssistantStore((state) => state.setSendEmail);
+  const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
 
   const handleCopy = async (content: string) => {
@@ -253,7 +277,7 @@ const MessageActionButtons = ({
     <div
       className={clsx(
         "flex items-center w-full",
-        isLast && "mb-16",
+        isLast && "mb-16 max-sm:mb-4",
         isUser ? "gap-4 justify-end" : "gap-6 ml-4"
       )}
     >
@@ -306,11 +330,13 @@ const UserActionButtons = ({
     <>
       {/* // User Copy Button */}
       <button
+        disabled={copied}
         onClick={handleCopy}
         className={clsx(
           "opacity-0 flex items-center gap-2 text-sm group/tooltip relative",
           "transition-colors duration-300 cursor-pointer",
           "hover:text-cyan-400",
+          "max-lg:opacity-100",
           "group-hover/actionButtons:opacity-100 group-hover/actionButtons:transition-opacity group-hover/actionButtons:duration-300"
         )}
       >
@@ -325,6 +351,7 @@ const UserActionButtons = ({
           "opacity-0 flex items-center gap-2 text-sm group/tooltip relative",
           "transition-colors duration-300 cursor-pointer",
           "hover:text-cyan-400",
+          "max-lg:opacity-100",
           "group-hover/actionButtons:opacity-100 group-hover/actionButtons:transition-opacity group-hover/actionButtons:duration-300"
         )}
       >
@@ -349,6 +376,7 @@ const AssistantActionButtons = ({
     <>
       {/* Assistant Copy Button */}
       <button
+        disabled={copied}
         onClick={handleCopy}
         className={clsx(
           "flex items-center gap-2 text-sm",

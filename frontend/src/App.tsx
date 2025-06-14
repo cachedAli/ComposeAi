@@ -13,7 +13,19 @@ function App() {
   const setLoading = useEmailAssistantStore((state) => state.setLoading);
 
   useEffect(() => {
-    checkAuth().finally(() => setLoading(false));
+    const hash = window.location.hash;
+    const pathname = window.location.pathname;
+
+    const isMagicLink = hash.includes("access_token");
+    const isAuthRoute =
+      pathname === "/reset-password" || pathname === "/auth/callback";
+
+    if (isMagicLink || isAuthRoute) {
+      useEmailAssistantStore.getState().setLoading(false);
+      return;
+    } else {
+      checkAuth().finally(() => setLoading(false));
+    }
   });
   useScrollToTop();
   useAuthRedirectHandler();
