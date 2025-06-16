@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^5.0.1",
     "@supabase/supabase-js": "^2.50.0",
     "@tailwindcss/vite": "^4.1.8",
+    "axios": "^1.10.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.16.0",
     "lucide-react": "^0.513.0",
@@ -28,6 +29,7 @@
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.8",
+    "uuid": "^11.1.0",
     "zod": "^3.25.51",
     "zustand": "^5.0.5"
   },

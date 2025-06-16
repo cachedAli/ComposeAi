@@ -4,7 +4,7 @@ import { useTextAreaHeightResize } from "@/hooks/useTextAreaHeightResize";
 import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
 import { useUserStore } from "@/store/useUserStore";
 import clsx from "clsx";
-import { Check, Copy, Mail, Pencil, ShieldAlert } from "lucide-react";
+import { Check, Copy, Mail, Pencil, ShieldAlert, Sparkle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -12,6 +12,9 @@ import { FileThumbPreview, ImageThumbPreview } from "./upload/FileThumbnails";
 
 const AssistantMessages = () => {
   const messages = useEmailAssistantStore((state) => state.messages);
+  const assistantLoading = useEmailAssistantStore(
+    (state) => state.assistantLoading
+  );
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,7 +26,7 @@ const AssistantMessages = () => {
   return (
     <div
       className={clsx(
-        "flex flex-col gap-10 w-full max-w-[800px] mx-auto",
+        "relative flex flex-col gap-10 w-full max-w-[800px] mx-auto",
         messages.length !== 0 ? " mt-16" : "",
         "max-lg:w-full"
       )}
@@ -35,6 +38,11 @@ const AssistantMessages = () => {
           isLast={index === messages.length - 1}
         />
       ))}
+      {assistantLoading && (
+        <span className="absolute bottom-5 left-11">
+          <Sparkle className="sparkle-morph" />
+        </span>
+      )}
       <div ref={bottomRef}></div>
     </div>
   );
@@ -277,7 +285,7 @@ const MessageActionButtons = ({
     <div
       className={clsx(
         "flex items-center w-full",
-        isLast && "mb-16 max-sm:mb-4",
+        // isLast && "",
         isUser ? "gap-4 justify-end" : "gap-6 ml-4"
       )}
     >

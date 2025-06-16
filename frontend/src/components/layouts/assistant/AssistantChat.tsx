@@ -14,6 +14,7 @@ import { useUserStore } from "@/store/useUserStore";
 import FilePreview from "./upload/FilePreview";
 import Button from "@/components/ui/Button";
 import { useCloseOnClick } from "@/hooks/useCloseOnClick";
+import { v4 as uuidv4 } from "uuid";
 
 const AssistantChat = () => {
   const messages = useEmailAssistantStore((state) => state.messages);
@@ -59,26 +60,45 @@ const ChatTopContent = () => {
 
 const ChatTextArea = () => {
   const [value, setValue] = useState("");
-  const { file, addMessage, setFile } = useEmailAssistantStore();
+  const { file, addMessage, setFile, sendToBackend, messages } =
+    useEmailAssistantStore();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useTextAreaHeightResize(textAreaRef, value);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!value.trim()) return;
 
-    addMessage({ role: "user", content: value.trim(), file });
+    const userMsg = {
+      id: uuidv4(),
+      role: "user" as "user",
+      content: value.trim(),
+      file,
+    };
 
-    setFile(null);
+    // 1. Show user message immediately
+    addMessage(userMsg);
+
+    // Clear input
     setValue("");
+    setFile(null);
 
-    // Later you’ll replace this with API call
-    setTimeout(() => {
+    // 2. Call backend
+    const response = await sendToBackend(userMsg, messages);
+
+    if (response?.data?.success) {
       addMessage({
+        id: uuidv4(),
         role: "assistant",
-        content: "Thanks for your message! (This is a dummy reply.)",
+        content: response.data.geminiText,
       });
-    }, 1000);
+    } else {
+      addMessage({
+        id: uuidv4(),
+        role: "assistant",
+        content: "❌ Something went wrong. Please try again.",
+      });
+    }
   };
 
   return (

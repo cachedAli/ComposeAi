@@ -112,7 +112,6 @@ const Buttons = () => {
   const { setLogout } = useEmailAssistantStore();
   const { user } = useUserStore();
   const navigate = useNavigate();
-  console.log(user);
   return (
     <div>
       {!user ? (
