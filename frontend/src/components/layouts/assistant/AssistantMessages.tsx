@@ -1,17 +1,21 @@
-import Button from "@/components/ui/Button";
-import AssistantLogo from "@/components/ui/logo/AssistantLogo";
-import { useTextAreaHeightResize } from "@/hooks/useTextAreaHeightResize";
-import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
-import { useUserStore } from "@/store/useUserStore";
-import clsx from "clsx";
-import { Check, Copy, Mail, Pencil, ShieldAlert, Sparkle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import clsx from "clsx";
+
+import { Check, Copy, Mail, Pencil, ShieldAlert, Sparkle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
 import { FileThumbPreview, ImageThumbPreview } from "./upload/FileThumbnails";
+import { useTextAreaHeightResize } from "@/hooks/useTextAreaHeightResize";
+import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
+import AssistantLogo from "@/components/ui/logo/AssistantLogo";
+import { useMessagesStore } from "@/store/useMessagesStore";
+import { useUserStore } from "@/store/useUserStore";
+import Button from "@/components/ui/Button";
+import { v4 as uuidv4 } from "uuid";
 
 const AssistantMessages = () => {
-  const messages = useEmailAssistantStore((state) => state.messages);
+  const messages = useMessagesStore((state) => state.messages);
   const assistantLoading = useEmailAssistantStore(
     (state) => state.assistantLoading
   );
@@ -66,7 +70,12 @@ const MessageBubble = ({
   const [isEditing, setIsEditing] = useState(false);
   const [newContent, setNewContent] = useState(content);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  const editMessage = useEmailAssistantStore((state) => state.editMessage);
+  const editMessage = useMessagesStore((state) => state.editMessage);
+  const addMessage = useMessagesStore((state) => state.addMessage);
+  const messages = useMessagesStore((state) => state.messages);
+  const sendEditMessageToBackend = useMessagesStore(
+    (state) => state.sendEditMessageToBackend
+  );
   const isImage = file?.type?.startsWith("image/");
 
   useEffect(() => {
@@ -77,9 +86,36 @@ const MessageBubble = ({
     }
   }, [isEditing]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
+    if (!newContent.trim()) return;
+
     editMessage(msgId, newContent.trim());
+
     setIsEditing(false);
+
+    console.log(newContent);
+
+    const response = await sendEditMessageToBackend(
+      msgId,
+      newContent,
+      messages
+    );
+
+    console.log(response);
+
+    if (response?.data?.success) {
+      addMessage({
+        id: uuidv4(),
+        role: "assistant",
+        content: response.data.geminiText,
+      });
+    } else {
+      addMessage({
+        id: uuidv4(),
+        role: "assistant",
+        content: "❌ Something went wrong. Please try again.",
+      });
+    }
   };
 
   const handleCancel = () => {
@@ -150,11 +186,11 @@ const MessageBubble = ({
           {content && (
             <div
               className={clsx(
-                "px-4 py-2 rounded-xl break-words whitespace-pre-wrap",
-                isUser ? "bg-blue-600 text-white" : "bg-neutral-700 text-white",
+                " py-2 leading-7 rounded-xl break-words whitespace-pre-wrap",
+                isUser ? "bg-neutral-700 text-white px-4" : "text-white px-2 ",
                 !file
                   ? "rounded-xl mt-2"
-                  : "rounded-b-full rounded-tl-full rounded-tr-2xl -mt-1 px-5",
+                  : "rounded-b-2xl rounded-tl-2xl rounded-tr-sm -mt-1 px-5",
                 file && content.length < 50 && "max-w-fit md:self-end",
                 file && content.length < 20 && "max-sm:self-end"
               )}
@@ -230,8 +266,8 @@ const MessageRow = ({
 
 const MessageActionButtons = ({
   content,
-  isLast,
   isUser,
+  isLast,
   setIsEditing,
   isEditing,
 }: {
@@ -285,7 +321,7 @@ const MessageActionButtons = ({
     <div
       className={clsx(
         "flex items-center w-full",
-        // isLast && "",
+        isLast && "mb-10",
         isUser ? "gap-4 justify-end" : "gap-6 ml-4"
       )}
     >

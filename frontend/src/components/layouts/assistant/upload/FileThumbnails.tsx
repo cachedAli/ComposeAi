@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { File, FileArchive, FileText, X } from "lucide-react";
+import { File as FileIcon, FileText, X } from "lucide-react";
 
 import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
 import { cn } from "@/libs/utils";
@@ -32,11 +32,8 @@ export const FileThumbPreview = ({ file, isChatArea }: ThumbPreviewProps) => {
   const getFileIcon = (file: File) => {
     if (file.type === "application/pdf")
       return <FileText size={20} className="max-sm:size-4" />;
-    if (file.type === "application/msword")
-      return <FileText size={20} className="max-sm:size-4" />;
-    if (file.type === "application/x-zip-compressed")
-      return <FileArchive size={20} className="max-sm:size-4" />;
-    return <File size={20} />;
+
+    return <FileIcon size={20} />;
   };
   return (
     <div
@@ -71,7 +68,7 @@ export const FileThumbPreview = ({ file, isChatArea }: ThumbPreviewProps) => {
             {file?.name}
           </h2>
           <h2 className="text-sm">
-            {file?.name.split(".").pop()?.toUpperCase()}
+            {file?.name?.split(".").pop()?.toUpperCase()}
           </h2>
         </div>
       </div>
@@ -83,22 +80,28 @@ export const ImageThumbPreview = ({
   file,
   isChatArea = false,
 }: ThumbPreviewProps) => {
+  if (!file) return null;
+
+  const isUploadedFile = file instanceof File;
+
+  const imageUrl = isUploadedFile
+    ? URL.createObjectURL(file)
+    : (file as any)?.url;
+
   return (
-    file && (
-      <div
-        key={file?.name}
-        className={clsx(
-          "relative bg-neutral-700 rounded-xl p-1.5 flex items-center justify-center",
-          isChatArea ? "size-56 max-sm:size-48" : "size-14"
-        )}
-      >
-        {!isChatArea && <CancelButton className="size-4 top-0.5 right-0.5" />}
-        <img
-          src={URL.createObjectURL(file)}
-          alt={file.name}
-          className="max-w-full max-h-full object-contain rounded-lg"
-        />
-      </div>
-    )
+    <div
+      key={file.name}
+      className={clsx(
+        "relative bg-neutral-700 rounded-xl p-1.5 flex items-center justify-center",
+        isChatArea ? "size-56 max-sm:size-48" : "size-14"
+      )}
+    >
+      {!isChatArea && <CancelButton className="size-4 top-0.5 right-0.5" />}
+      <img
+        src={imageUrl}
+        alt={file.name}
+        className="max-w-full max-h-full object-contain rounded-lg"
+      />
+    </div>
   );
 };

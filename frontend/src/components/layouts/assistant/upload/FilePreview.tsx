@@ -6,7 +6,7 @@ const FilePreview = () => {
 
   return (
     <div className="absolute top-3 left-3 ">
-      {file && !file.type.startsWith("image/") ? (
+      {file && !file?.type?.startsWith("image/") ? (
         <FileThumbPreview file={file} />
       ) : (
         <ImageThumbPreview file={file} />

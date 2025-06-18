@@ -13,3 +13,10 @@ export type Messages = {
     content: string;
     file?: File | null;
 }
+
+export type FileType = {
+    name: string;
+    type: string;
+    size: string;
+    path: string | null;
+}

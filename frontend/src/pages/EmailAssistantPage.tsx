@@ -1,17 +1,18 @@
 import { useEffect } from "react";
-
-import { useUserStore } from "@/store/useUserStore";
-import AssistantChat from "../components/layouts/assistant/AssistantChat";
-import Header from "../components/layouts/Header";
-import AssistantMessages from "../components/layouts/assistant/AssistantMessages";
-import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
 import clsx from "clsx";
+
+import AssistantMessages from "../components/layouts/assistant/AssistantMessages";
 import AssistantOverlay from "../components/layouts/assistant/AssistantOverlay";
+import AssistantChat from "../components/layouts/assistant/AssistantChat";
+import { useMessagesStore } from "@/store/useMessagesStore";
+import { useUserStore } from "@/store/useUserStore";
+import Header from "../components/layouts/Header";
 
 const EmailAssistantPage = () => {
   const fetchUser = useUserStore((state) => state.fetchUser);
   const user = useUserStore((state) => state.user);
-  const messages = useEmailAssistantStore((state) => state.messages);
+  const messages = useMessagesStore((state) => state.messages);
+  const fetchMessages = useMessagesStore((state) => state.fetchMessages);
 
   const noMessages = messages.length === 0;
 
@@ -20,6 +21,12 @@ const EmailAssistantPage = () => {
       fetchUser();
     }
   }, [fetchUser, user]);
+
+  useEffect(() => {
+    if (noMessages) {
+      fetchMessages();
+    }
+  }, [fetchMessages]);
 
   return (
     <div

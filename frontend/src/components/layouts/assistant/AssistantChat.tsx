@@ -1,4 +1,4 @@
-import { useRef, useState, type Ref, type RefObject } from "react";
+import { useEffect, useRef, useState, type Ref, type RefObject } from "react";
 import clsx from "clsx";
 
 import { ArrowUp, Info, LucideWandSparkles } from "lucide-react";
@@ -15,9 +15,10 @@ import FilePreview from "./upload/FilePreview";
 import Button from "@/components/ui/Button";
 import { useCloseOnClick } from "@/hooks/useCloseOnClick";
 import { v4 as uuidv4 } from "uuid";
+import { useMessagesStore } from "@/store/useMessagesStore";
 
 const AssistantChat = () => {
-  const messages = useEmailAssistantStore((state) => state.messages);
+  const messages = useMessagesStore((state) => state.messages);
 
   return (
     <div
@@ -60,9 +61,32 @@ const ChatTopContent = () => {
 
 const ChatTextArea = () => {
   const [value, setValue] = useState("");
-  const { file, addMessage, setFile, sendToBackend, messages } =
-    useEmailAssistantStore();
+  const setFile = useEmailAssistantStore((state) => state.setFile);
+  const file = useEmailAssistantStore((state) => state.file);
+
+  const sendToBackend = useMessagesStore((state) => state.sendToBackend);
+  const addMessage = useMessagesStore((state) => state.addMessage);
+  const messages = useMessagesStore((state) => state.messages);
+
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const el = textAreaRef.current;
+    if (!el) return;
+
+    const maxHeight = 400;
+
+    el.style.height = "auto";
+    const scrollHeight = el.scrollHeight;
+
+    if (scrollHeight > maxHeight) {
+      el.style.height = `${maxHeight}px`;
+      el.style.overflowY = "auto";
+    } else {
+      el.style.height = `${scrollHeight}px`;
+      el.style.overflowY = "hidden";
+    }
+  }, [value]);
 
   useTextAreaHeightResize(textAreaRef, value);
 
@@ -257,6 +281,7 @@ const TextArea = ({
       )}
       style={{
         minHeight: file ? "190px" : "80px",
+        maxHeight: "400px",
       }}
       placeholder="Describe your email and I’ll help you write it"
     />

@@ -4,19 +4,35 @@ import clsx from "clsx";
 import { Plus } from "lucide-react";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
 
 export const FileUploader = () => {
-  const setFile = useEmailAssistantStore((state)=>state.setFile);
+  const setFile = useEmailAssistantStore((state) => state.setFile);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      setFile(acceptedFiles[0]);
-    }
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
+        const fileSizeMB = file.size / (1024 * 1024);
+        if (fileSizeMB > 10) {
+          toast.error("File size exceeds 10 MB limit.");
+          return;
+        }
+        setFile(file);
+      }
+    },
+    [setFile]
+  );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: false,
+    maxSize: 10 * 1024 * 1024,
+    accept: {
+      "image/*": [],
+      "application/pdf": [],
+      "text/plain": [],
+    },
   });
 
   return (
