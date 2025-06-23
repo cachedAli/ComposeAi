@@ -13,6 +13,7 @@ import {
   Signup,
   VerifyEmail,
 } from "./lazyRoutes";
+import OAuthSuccess from "@/pages/OAuthSuccess";
 
 const Router = () => {
   return (
@@ -30,6 +31,7 @@ const Router = () => {
 
       {/* Callback */}
       <Route path="/auth/callback" element={<AuthRedirectHandler />} />
+      <Route path="/oauth/success" element={<OAuthSuccess />} />
 
       {/* Auth */}
       <Route
@@ -74,7 +76,7 @@ const Router = () => {
         <Route
           path="/reset-password"
           element={
-            <LazyLoader> 
+            <LazyLoader>
               <ResetPassword />
             </LazyLoader>
           }

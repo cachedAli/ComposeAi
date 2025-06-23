@@ -13,6 +13,7 @@ import { useMessagesStore } from "@/store/useMessagesStore";
 import { useUserStore } from "@/store/useUserStore";
 import Button from "@/components/ui/Button";
 import { v4 as uuidv4 } from "uuid";
+import type { User } from "@/types/userTypes";
 
 const AssistantMessages = () => {
   const messages = useMessagesStore((state) => state.messages);
@@ -95,17 +96,20 @@ const MessageBubble = ({
 
     console.log(newContent);
 
+    const assistantId = uuidv4();
+
     const response = await sendEditMessageToBackend(
       msgId,
       newContent,
-      messages
+      messages,
+      assistantId
     );
 
     console.log(response);
 
     if (response?.data?.success) {
       addMessage({
-        id: uuidv4(),
+        id: assistantId,
         role: "assistant",
         content: response.data.geminiText,
       });
@@ -172,7 +176,8 @@ const MessageBubble = ({
         </>
       ) : (
         <>
-          {file &&
+          {isUser &&
+            file &&
             (isImage ? (
               <div className="flex justify-end">
                 <ImageThumbPreview file={file} isChatArea />
@@ -195,7 +200,7 @@ const MessageBubble = ({
                 file && content.length < 20 && "max-sm:self-end"
               )}
             >
-              {content}
+              {content.trim()}
             </div>
           )}
         </>
@@ -206,6 +211,7 @@ const MessageBubble = ({
         isUser={isUser}
         setIsEditing={setIsEditing}
         isEditing={isEditing}
+        msgId={msgId}
       />
     </div>
   );
@@ -270,15 +276,21 @@ const MessageActionButtons = ({
   isLast,
   setIsEditing,
   isEditing,
+  msgId,
 }: {
   content: string;
   isLast: boolean;
   isUser: boolean;
   isEditing?: boolean;
   setIsEditing?: (val: boolean) => void;
+  msgId: string;
 }) => {
   const [copied, setCopied] = useState(false);
   const setSendEmail = useEmailAssistantStore((state) => state.setSendEmail);
+  const setHtml = useEmailAssistantStore((state) => state.setHtml);
+  const setSendingEmailId = useEmailAssistantStore(
+    (state) => state.setSendingEmailId
+  );
   const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
 
@@ -298,15 +310,15 @@ const MessageActionButtons = ({
   const handleSendEmail = () => {
     if (!user) {
       return toast(
-        <div className="flex items-center gap-2 ml-2">
-          <span>Sign-in required to access this feature</span>
+        <div className="flex items-center gap-2 ml-1">
+          <span>Sign in with google required to access this feature</span>
         </div>,
         {
           icon: <ShieldAlert className="text-red-500" />,
           action: (
             <Button
               onClick={() => navigate("/signin")}
-              className="w-32 text-sm h-9 ml-auto"
+              className="w-32 text-sm h-9 ml-auto whitespace-nowrap"
             >
               Sign in
             </Button>
@@ -314,7 +326,8 @@ const MessageActionButtons = ({
         }
       );
     }
-
+    setSendingEmailId(msgId);
+    setHtml(content);
     setSendEmail(true);
   };
   return (
@@ -330,6 +343,7 @@ const MessageActionButtons = ({
           copied={copied}
           handleCopy={() => handleCopy(content)}
           handleSendEmail={handleSendEmail}
+          user={user}
         />
       ) : (
         <>
@@ -410,11 +424,13 @@ type AssistantActionButtonsProps = {
   handleCopy: () => void;
   copied: boolean;
   handleSendEmail: () => void;
+  user?: User | null;
 };
 const AssistantActionButtons = ({
   handleCopy,
   copied,
   handleSendEmail,
+  user,
 }: AssistantActionButtonsProps) => {
   return (
     <>
@@ -432,16 +448,18 @@ const AssistantActionButtons = ({
       </button>
 
       {/* Assistant Send Email Button */}
-      <button
-        onClick={handleSendEmail}
-        className={clsx(
-          "flex items-center gap-2 text-sm ",
-          "transition-all duration-300 cursor-pointer",
-          "hover:text-cyan-400"
-        )}
-      >
-        <Mail size={20} /> Use as Email
-      </button>
+      {(!user || user?.provider === "google") && (
+        <button
+          onClick={handleSendEmail}
+          className={clsx(
+            "flex items-center gap-2 text-sm",
+            "transition-all duration-300 cursor-pointer",
+            "hover:text-cyan-400"
+          )}
+        >
+          <Mail size={20} /> Use as Email
+        </button>
+      )}
     </>
   );
 };

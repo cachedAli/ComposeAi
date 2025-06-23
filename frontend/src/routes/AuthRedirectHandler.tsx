@@ -24,6 +24,20 @@ const AuthRedirectHandler = () => {
 
       const user = data?.user;
       const meta = user?.user_metadata || {};
+      const provider = user?.app_metadata?.provider;
+
+      if (
+        provider === "google" &&
+        user?.user_metadata?.hasConnectedGmail === undefined
+      ) {
+        await supabase.auth.updateUser({
+          data: {
+            hasConnectedGmail: false,
+          },
+        });
+      }
+
+      
 
       const fullName = meta.full_name || `${meta?.firstName} ${meta?.lastName}`;
 

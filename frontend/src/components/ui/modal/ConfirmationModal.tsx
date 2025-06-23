@@ -45,7 +45,7 @@ const ConfirmationModal = ({ ...props }: ConfirmationModalProps) => {
           "bg-neutral-800"
         )}
       >
-        <div className="flex flex-col gap-2 items-start justify-center max-sm:items-center max-sm:text-center">
+        <div className="flex flex-col gap-2 items-start justify-center">
           <h2 className="text-2xl max-sm:text-xl font-semibold">
             {props.title}
           </h2>
@@ -66,8 +66,12 @@ const ConfirmationModal = ({ ...props }: ConfirmationModalProps) => {
         ) : (
           <div className="flex gap-3 mt-2 w-full">
             <Button onClick={props.backButtonOnClick}>Cancel</Button>
-            <Button disabled={props.loading} variant="secondary" onClick={props.onClick}>
-              {props.loading ? <Loader/> : "Logout"}
+            <Button
+              disabled={props.loading}
+              variant="secondary"
+              onClick={props.onClick}
+            >
+              {props.loading ? <Loader /> : "Logout"}
             </Button>
           </div>
         )}

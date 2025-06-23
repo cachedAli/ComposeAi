@@ -8,7 +8,8 @@ export const useFetch = async (
     data?: any,
     setLoading?: (value: boolean) => void,
     config?: any,
-    customApi = chatApi
+    showToast: boolean = true,
+    customApi = chatApi,
 ): Promise<AxiosResponse | null> => {
 
     setLoading?.(true);
@@ -18,7 +19,7 @@ export const useFetch = async (
 
         response = await customApi({ method, url, data, ...config });
 
-        toast.success(response?.data?.message || "Success");
+        { showToast && toast.success(response?.data?.message || "Success"); }
 
         return response;
     } catch (error) {

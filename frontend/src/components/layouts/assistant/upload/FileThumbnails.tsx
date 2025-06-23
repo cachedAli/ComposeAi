@@ -29,6 +29,8 @@ const CancelButton = ({ className }: { className?: string }) => {
 };
 
 export const FileThumbPreview = ({ file, isChatArea }: ThumbPreviewProps) => {
+  if (!file) return null;
+
   const getFileIcon = (file: File) => {
     if (file.type === "application/pdf")
       return <FileText size={20} className="max-sm:size-4" />;

@@ -4,6 +4,7 @@ export type User = {
     lastName: string;
     email: string;
     profilePic: string | undefined;
+    provider?: string;
 }
 
 export type Messages = {

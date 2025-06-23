@@ -24,7 +24,7 @@ export const features = [
 
     {
         title: "Quick Insert",
-        description: "Auto-inserts relevant links, attachments, or images based on your draft.",
+        description: "Auto-inserts attachments, or images based on your draft.",
         icon: Paperclip
     },
     {

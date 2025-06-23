@@ -58,7 +58,8 @@ html {
 }
 
 @keyframes sparkleMorph {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
     filter: brightness(1) blur(0);
     opacity: 0.6;

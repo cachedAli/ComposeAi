@@ -1,19 +1,25 @@
 import express from "express";
 import cors from "cors"
 import router from "./routes/chat.route";
+import oauthRouter from "./routes/oauth.route";
 
 const app = express()
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cors());
 
 const chatRoutes = router;
+const oauthRoutes = oauthRouter;
+
 
 app.get("/", (req, res) => {
     res.send("Hi amigo")
 })
 
 app.use("/api/chat", chatRoutes)
+app.use("/api/oauth", oauthRoutes)
+
 
 
 

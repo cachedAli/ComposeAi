@@ -21,6 +21,7 @@ export const createUserObject = (user: any) => {
     }
 
     const meta = user.user_metadata || {};
+    const provider = user.app_metadata.provider ?? "email"
     const fullName = meta.full_name || "";
     const [firstName, ...lastParts] = fullName.split(" ");
     const lastName = lastParts.join(" ");
@@ -30,8 +31,8 @@ export const createUserObject = (user: any) => {
         firstName: firstName || meta.firstName,
         lastName: lastName || meta.lastName,
         email: user.email ?? "",
-        profilePic: meta.avatar_url ?? undefined
-
+        profilePic: meta.avatar_url ?? undefined,
+        provider: provider
     }
 }
 

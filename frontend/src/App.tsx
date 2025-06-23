@@ -7,6 +7,7 @@ import Router from "./routes/Router";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEmailAssistantStore } from "./store/useEmailAssistantStore";
 import { useEffect } from "react";
+import { supabase } from "./libs/supabaseClient";
 
 function App() {
   const { checkAuth } = useAuthStore();
@@ -29,6 +30,12 @@ function App() {
   });
   useScrollToTop();
   useAuthRedirectHandler();
+
+  const handle =async()=>{
+    const {data} = await supabase.auth.getSession();
+    return console.log(data)
+  }
+  handle()
 
   return (
     <>
