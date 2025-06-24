@@ -37,6 +37,7 @@ export default AssistantChat;
 
 const ChatTopContent = () => {
   const user = useUserStore((state) => state.user);
+  const fetchUserLoading = useUserStore((state) => state.fetchUserLoading);
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-4">
@@ -45,12 +46,23 @@ const ChatTopContent = () => {
         <AssistantLogo />
 
         {/* User name */}
-        <h2 className="text-5xl font-medium">
-          {user
-            ? `Hi, ${capitalizeFirstLetter(
-                `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim()
-              )}`
-            : "Hi there!"}
+        <h2 className="text-5xl font-medium flex items-center gap-2">
+          {user ? (
+            <>
+              Hi,
+              {fetchUserLoading ? (
+                <div className="w-60 h-10 bg-neutral-800 animate-pulse rounded" />
+              ) : (
+                <span>
+                  {capitalizeFirstLetter(
+                    `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim()
+                  )}
+                </span>
+              )}
+            </>
+          ) : (
+            <>Hi there!</>
+          )}
         </h2>
       </div>
 
@@ -67,6 +79,9 @@ const ChatTextArea = () => {
   const sendToBackend = useMessagesStore((state) => state.sendToBackend);
   const addMessage = useMessagesStore((state) => state.addMessage);
   const messages = useMessagesStore((state) => state.messages);
+  const assistantLoading = useEmailAssistantStore(
+    (state) => state.assistantLoading
+  );
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -91,7 +106,7 @@ const ChatTextArea = () => {
   useTextAreaHeightResize(textAreaRef, value);
 
   const handleSend = async () => {
-    if (!value.trim()) return;
+    if (!value.trim() || assistantLoading) return;
 
     const userMsg = {
       id: uuidv4(),
@@ -152,6 +167,9 @@ const ActionButtons = ({
 }) => {
   const [showQuickActions, setShowQuickActions] = useState(false);
   const quickActionsRef = useRef<HTMLDivElement>(null);
+  const assistantLoading = useEmailAssistantStore(
+    (state) => state.assistantLoading
+  );
 
   useCloseOnClick(quickActionsRef, showQuickActions, setShowQuickActions);
 
@@ -187,9 +205,10 @@ const ActionButtons = ({
         className={clsx(
           "size-9 bg-gradient-to-b from-cyan-500 to-indigo-500 rounded-full flex items-center justify-center cursor-pointer brightness-110 transition-all duration-300 ",
           " hover:opacity-85",
-          value.length === 0 && "pointer-events-none opacity-50"
+          (value.length === 0 || assistantLoading) &&
+            "pointer-events-none opacity-50"
         )}
-        disabled={value.length === 0}
+        disabled={value.length === 0 || assistantLoading}
       >
         <ArrowUp className="font-bold" size={20} />
       </button>

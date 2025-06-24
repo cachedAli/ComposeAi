@@ -2,8 +2,9 @@ import { Link, useLocation } from "react-router-dom";
 import { IoLogoGithub } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 
-import Button from "./Button";
+import { preloadSignup } from "@/routes/preloadRoutes";
 import { useAuthStore } from "@/store/useAuthStore";
+import Button from "./Button";
 import Loader from "./Loader";
 
 const AuthButtons = () => {
@@ -12,9 +13,7 @@ const AuthButtons = () => {
   const isSignin = location.pathname === "/signin";
   const { signInWithGoogle, signInWithGitHub, githubLoading, googleLoading } =
     useAuthStore();
-
-  console.log(googleLoading);
-
+    
   const handleSigninWithGoogle = async () => {
     try {
       await signInWithGoogle();
@@ -81,7 +80,11 @@ const AuthButtons = () => {
         isSignin && (
           <div className="text-center text-sm text-gray-400 mt-2">
             Don’t have an account?{" "}
-            <Link to="/signup" className="text-cyan-400 hover:underline">
+            <Link
+              to="/signup"
+              onMouseEnter={() => preloadSignup()}
+              className="text-cyan-400 hover:underline"
+            >
               Sign up
             </Link>
           </div>

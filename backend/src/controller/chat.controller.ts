@@ -8,7 +8,7 @@ import { isEmail, mentionsAttachmentKeywords } from "../libs/constants.js";
 
 
 
-export const handleChatMessage = async (req: Request, res: Response) => {
+export const handleChatMessage = async (req: Request, res: Response): Promise<void> => {
     const { prompt, id, userId = null, history, assistantId } = req.body;
     const file = req.file
 
@@ -54,8 +54,29 @@ export const handleChatMessage = async (req: Request, res: Response) => {
             systemInstruction: systemInstructions
         })
 
-        const result = chat.sendMessage(finalPrompt);
-        const geminiText = (await result).response.text();
+        let geminiText = "";
+        try {
+            const result = await chat.sendMessage(finalPrompt);
+            geminiText = result.response.text();
+        } catch (err: any) {
+            console.error("❌ Gemini API error:", err);
+
+            const errorMessage = err?.message?.toLowerCase() ?? "";
+
+            if (errorMessage.includes("quota") || errorMessage.includes("token") || errorMessage.includes("exceeded")) {
+                res.status(429).json({
+                    success: false,
+                    message: "AI is currently unavailable due to usage limits. Please try again later.",
+                });
+                return;
+            }
+
+            res.status(500).json({
+                success: false,
+                message: "AI failed to generate a response. Please try again.",
+            });
+            return;
+        }
 
         const lowercasePrompt = prompt.toLowerCase();
 
@@ -80,7 +101,7 @@ export const handleChatMessage = async (req: Request, res: Response) => {
                 }
             }
 
-            const { data, error } = await supabase.from("messages").insert([
+            const { error } = await supabase.from("messages").insert([
                 {
                     user_id: userId,
                     id: id,
@@ -109,11 +130,9 @@ export const handleChatMessage = async (req: Request, res: Response) => {
                 return;
             }
 
-            console.log("Inserted messages:", data);
         }
 
 
-        console.log(geminiText)
         res.status(200).json({ success: true, geminiText })
         return;
     } catch (error) {
@@ -160,9 +179,28 @@ export const editMessage = async (req: Request, res: Response) => {
             systemInstruction: systemInstructions,
         });
 
-        const result = await chat.sendMessage(newPrompt);
-        const geminiText = result.response.text();
+        let geminiText = "";
+        try {
+            const result = await chat.sendMessage(newPrompt);
+            geminiText = result.response.text();
+        } catch (err: any) {
+            console.error("❌ Gemini refine error:", err);
+            const errorMessage = err?.message?.toLowerCase() ?? "";
 
+            if (errorMessage.includes("quota") || errorMessage.includes("token") || errorMessage.includes("exceeded")) {
+                res.status(429).json({
+                    success: false,
+                    message: "AI is currently unavailable due to usage limits. Please try again later.",
+                });
+                return
+            }
+
+            res.status(500).json({
+                success: false,
+                message: "AI failed to refine the message. Please try again.",
+            });
+            return
+        }
         const { error: insertError } = await supabase.from("messages").insert([
             {
                 id: assistantId,
@@ -199,8 +237,28 @@ export const refineMessage = async (req: Request, res: Response) => {
             systemInstruction: systemInstructions,
         });
 
-        const result = await chat.sendMessage(prompt);
-        const geminiText = result.response.text();
+        let geminiText = "";
+        try {
+            const result = await chat.sendMessage(prompt);
+            geminiText = result.response.text();
+        } catch (err: any) {
+            console.error("Gemini refine error:", err);
+            const errorMessage = err?.message?.toLowerCase() ?? "";
+
+            if (errorMessage.includes("quota") || errorMessage.includes("token") || errorMessage.includes("exceeded")) {
+                res.status(429).json({
+                    success: false,
+                    message: "AI is currently unavailable due to usage limits. Please try again later.",
+                });
+                return;
+            }
+
+            res.status(500).json({
+                success: false,
+                message: "AI failed to refine the message. Please try again.",
+            });
+            return;
+        }
 
         if (userId) {
             const { error } = await supabase.from("messages").insert([
@@ -243,7 +301,6 @@ export const sendEmail = async (req: Request, res: Response) => {
         res.status(401).json({ success: false, message: "Unauthorized" });
         return;
     }
-    console.log(emailTo)
 
     const userId = userData.user.id;
 

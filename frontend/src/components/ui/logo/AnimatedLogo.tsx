@@ -7,7 +7,12 @@ export const AnimatedLogo = ({ home = true }: { home?: boolean }) => {
   return (
     <motion.img
       src={logo}
-      className={clsx(home ? "absolute -top-16 -right-16 z-20" : "h-24")}
+      className={clsx(
+        "pointer-events-none",
+        home
+          ? "absolute -top-15 -right-10 z-20 max-lg:h-36 max-lg:-right-5 max-lg:-top-12 max-md:h-28 max-md:-top-10 max-sm:h-20 max-sm:-right-2 max-sm:-top-6"
+          : "h-24"
+      )}
       animate={{
         y: [0, -10, 0, 10, 0],
         rotate: [0, 2, -2, 2, 0],

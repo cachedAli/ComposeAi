@@ -94,8 +94,6 @@ const MessageBubble = ({
 
     setIsEditing(false);
 
-    console.log(newContent);
-
     const assistantId = uuidv4();
 
     const response = await sendEditMessageToBackend(
@@ -104,8 +102,6 @@ const MessageBubble = ({
       messages,
       assistantId
     );
-
-    console.log(response);
 
     if (response?.data?.success) {
       addMessage({
@@ -191,8 +187,8 @@ const MessageBubble = ({
           {content && (
             <div
               className={clsx(
-                " py-2 leading-7 rounded-xl break-words whitespace-pre-wrap",
-                isUser ? "bg-neutral-700 text-white px-4" : "text-white px-2 ",
+                " leading-7 rounded-xl break-words whitespace-pre-wrap",
+                isUser ? "bg-neutral-700 text-white px-4 py-2" : "text-white px-2 py-0",
                 !file
                   ? "rounded-xl mt-2"
                   : "rounded-b-2xl rounded-tl-2xl rounded-tr-sm -mt-1 px-5",

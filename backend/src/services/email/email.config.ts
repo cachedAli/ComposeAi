@@ -7,7 +7,7 @@ export const sendEmailUsingGmail = async ({
     html,
     userEmail,
     refreshToken,
-    attachment, 
+    attachment,
 }: {
     to: string;
     subject: string;
@@ -81,6 +81,6 @@ export const sendEmailUsingGmail = async ({
         },
     });
 
-    console.log("✅ Email sent via Gmail API");
+    console.log("Email sent");
     return response;
 };

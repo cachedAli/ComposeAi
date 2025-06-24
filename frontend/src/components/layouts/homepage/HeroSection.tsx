@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Zap } from "lucide-react";
 
 import { AnimatedLogo } from "@/components/ui/logo/AnimatedLogo";
+import ComposeAiPreview from "/composeAiAssistantPreview.webp";
 import Button from "../../ui/Button";
+import { preloadEmailAssistant } from "@/routes/preloadRoutes";
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -38,13 +40,18 @@ const HeroSection = () => {
         </h2>
       </div>
 
-      {/* Sign UpButton */}
+      {/* Button */}
+      <div className="flex flex-col items-center justify-center gap-4 "></div>
       <Button
         variant="secondary"
-        className="w-60"
-        onClick={() => navigate("/signup")}
+        className="w-[370px]"
+        onClick={() => {
+          preloadEmailAssistant;
+          navigate("/email-assistant");
+        }}
+        onMouseEnter={() => preloadEmailAssistant()}
       >
-        Get Started For Free
+        Get started for free – no signup needed
       </Button>
 
       <HeroImg />
@@ -61,9 +68,15 @@ const HeroImg = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-indigo-500 to-emerald-500 rounded-lg blur-xl opacity-70 transform -rotate-6 scale-105"></div>
       <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 via-indigo-500 to-emerald-400 rounded-lg blur-xl opacity-70 transform rotate-6 scale-105"></div>
 
-      <span className="h-[500px] w-[1000px] bg-gray-800 z-10 rounded-2xl text-4xl flex items-center justify-center">
-        Image Placeholder
-      </span>
+      <div className="aspect-video w-full max-w-[1000px] overflow-hidden shadow-lg z-10 rounded-2xl flex items-center justify-center bg-[#0d0d0d]">
+        <img
+          src={ComposeAiPreview}
+          loading="lazy"
+          alt="ComposeAI Preview"
+          className="w-full h-full object-contain pointer-events-none"
+        />
+      </div>
+
       <AnimatedLogo />
     </div>
   );

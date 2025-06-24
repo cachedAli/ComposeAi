@@ -10,6 +10,9 @@ import { toast } from "sonner";
 
 type MessagesState = {
 
+    fetchMessagesLoading: boolean;
+    setFetchMessagesLoading: (value: boolean) => void;
+
     messages: Messages[];
     setMessages: (value: Messages[]) => void;
     addMessage: (msg: Messages) => void;
@@ -23,6 +26,11 @@ type MessagesState = {
 
 export const useMessagesStore = create<MessagesState>((set) => ({
 
+    // Loading states
+    fetchMessagesLoading: false,
+    setFetchMessagesLoading: (value) => set({ fetchMessagesLoading: value }),
+
+    // Action
     messages: [],
     setMessages: (value) => set({ messages: value }),
     addMessage: (msg) => {
@@ -90,6 +98,7 @@ export const useMessagesStore = create<MessagesState>((set) => ({
 
 
     fetchMessages: async () => {
+        useMessagesStore.getState().setFetchMessagesLoading(true);
         const { data: { user } } = await supabase.auth.getUser()
 
         const { data, error } = await supabase
@@ -97,8 +106,6 @@ export const useMessagesStore = create<MessagesState>((set) => ({
             .select("*")
             .eq("user_id", user?.id)
             .order("created_at", { ascending: true, });
-
-        console.log(data)
 
         if (!error && data) {
             const messagesWithFiles = data.map((msg) => {
@@ -120,8 +127,12 @@ export const useMessagesStore = create<MessagesState>((set) => ({
                 };
             });
 
+            useMessagesStore.getState().setFetchMessagesLoading(false);
+
             useMessagesStore.getState().setMessages(messagesWithFiles);
         } else {
+
+            useMessagesStore.getState().setFetchMessagesLoading(false);
             console.error("Error fetching readings:", error);
         }
     },

@@ -1,13 +1,13 @@
+import { useEffect } from "react";
+
 import { Toaster } from "sonner";
 
 import { useAuthRedirectHandler } from "./hooks/useAuthRedirectHandler";
+import { useEmailAssistantStore } from "./store/useEmailAssistantStore";
 import { toastOptions } from "./components/ui/toastStyles";
 import { useScrollToTop } from "./hooks/useScrollToTop";
-import Router from "./routes/Router";
 import { useAuthStore } from "./store/useAuthStore";
-import { useEmailAssistantStore } from "./store/useEmailAssistantStore";
-import { useEffect } from "react";
-import { supabase } from "./libs/supabaseClient";
+import Router from "./routes/Router";
 
 function App() {
   const { checkAuth } = useAuthStore();
@@ -18,24 +18,18 @@ function App() {
     const pathname = window.location.pathname;
 
     const isMagicLink = hash.includes("access_token");
-    const isAuthRoute =
-      pathname === "/reset-password" || pathname === "/auth/callback";
+    const isMagicReset = isMagicLink && pathname === "/reset-password";
 
-    if (isMagicLink || isAuthRoute) {
-      useEmailAssistantStore.getState().setLoading(false);
-      return;
+    const isAuthCallback = pathname === "/auth/callback";
+
+    if (isMagicReset || isAuthCallback) {
+      setLoading(false);
     } else {
       checkAuth().finally(() => setLoading(false));
     }
-  });
+  }, []);
   useScrollToTop();
   useAuthRedirectHandler();
-
-  const handle =async()=>{
-    const {data} = await supabase.auth.getSession();
-    return console.log(data)
-  }
-  handle()
 
   return (
     <>

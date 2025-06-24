@@ -33,12 +33,6 @@ export const googleOAuthCallback = async (req: Request, res: Response) => {
         const payload = ticket.getPayload();
         const email = payload?.email;
 
-        console.log("User email:", email);
-        console.log("Access Token:", access_token);
-        console.log("Refresh Token:", refresh_token);
-
-        // ✅ You should store refresh_token in your DB against the Supabase user ID
-
         res.redirect(`http://localhost:5173/oauth/success?email=${email}&refresh_token=${refresh_token}`);
     } catch (err) {
         console.error("OAuth error", err);

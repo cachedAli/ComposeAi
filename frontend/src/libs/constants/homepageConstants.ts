@@ -47,12 +47,12 @@ export const howItWorks = [
     },
     {
         title: "Connect Email",
-        description: "Link your email safely using OAuth2 for seamless AI-powered drafting.",
+        description: "Securely link your Gmail with Google Sign-In via OAuth2.",
         icon: PiShieldCheckeredFill,
     },
     {
         title: "Generate Emails",
-        description: "Review, customize, and send your AI-crafted emails effortlessly.",
+        description: "Draft, personalize, and send your AI-crafted emails effortlessly.",
         icon: SiRobotframework,
     },
 ];

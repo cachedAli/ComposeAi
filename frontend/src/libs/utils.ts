@@ -26,12 +26,22 @@ export const createUserObject = (user: any) => {
     const [firstName, ...lastParts] = fullName.split(" ");
     const lastName = lastParts.join(" ");
 
+    let profilePic;
+
+    if (provider === "google") {
+        profilePic = meta.picture || meta.avatar_url;
+    } else if (provider === "github") {
+        profilePic = meta.avatar_url || meta.user_metadata?.avatar_url;
+    } else {
+        profilePic = meta.avatar_url || undefined;
+    }
+
     return {
         id: user?.id,
         firstName: firstName || meta.firstName,
         lastName: lastName || meta.lastName,
         email: user.email ?? "",
-        profilePic: meta.avatar_url ?? undefined,
+        profilePic: profilePic,
         provider: provider
     }
 }

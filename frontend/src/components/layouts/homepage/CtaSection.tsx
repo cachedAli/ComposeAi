@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 
+import { preloadSignup } from "@/routes/preloadRoutes";
 import Button from "../../ui/Button";
 
 const CtaSection = () => {
@@ -47,7 +48,11 @@ const CtaSection = () => {
       <Button
         variant="secondary"
         className="w-96 max-sm:w-full max-sm:text-xs"
-        onClick={() => navigate("/signup")}
+        onMouseEnter={() => preloadSignup()}
+        onClick={() => {
+          preloadSignup();
+          navigate("/signup");
+        }}
       >
         Start Writing Better Emails Now <ArrowRight size={30} />
       </Button>

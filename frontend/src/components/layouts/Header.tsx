@@ -4,10 +4,13 @@ import clsx from "clsx";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
+import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
+import { useMessagesStore } from "@/store/useMessagesStore";
+import { preloadSignin } from "@/routes/preloadRoutes";
 import { useUserStore } from "@/store/useUserStore";
 import composeAi from "/composeAi.png";
 import Button from "../ui/Button";
-import { useEmailAssistantStore } from "@/store/useEmailAssistantStore";
+import Loader from "../ui/Loader";
 
 type HeaderProps = {
   isHero?: boolean;
@@ -43,6 +46,8 @@ const Header = ({ isHero, isAssistant = false }: HeaderProps) => {
 
           {/* Logo + Nav (hidden on small screens) */}
           <Nav isAssistant={isAssistant} />
+
+          {isAssistant && <MessagesLoader />}
 
           <Buttons />
         </div>
@@ -117,7 +122,11 @@ const Buttons = () => {
       {!user ? (
         /* Sign in Button */
         <Button
-          onClick={() => navigate("/signin")}
+          onClick={() => {
+            preloadSignin();
+            navigate("/signin");
+          }}
+          onMouseEnter={() => preloadSignin()}
           variant="primary"
           className="h-10 max-[400px]:text-xs"
         >
@@ -134,5 +143,23 @@ const Buttons = () => {
         </Button>
       )}
     </div>
+  );
+};
+
+const MessagesLoader = () => {
+  const fetchMessagesLoading = useMessagesStore(
+    (state) => state.fetchMessagesLoading
+  );
+  const user = useUserStore((state) => state.user);
+
+  if (!fetchMessagesLoading) return null;
+
+  return (
+    user && (
+      <div className="flex items-center justify-center gap-4 text-gray-400 text-sm">
+        <Loader />
+        <span> Loading conversation...</span>
+      </div>
+    )
   );
 };
