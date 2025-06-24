@@ -1,4 +1,4 @@
-import { allowContactInfo } from "./constants";
+import { allowContactInfo } from "./constants.js";
 
 export function sanitizeResumeText(fileText: string, prompt: string) {
     const allow = allowContactInfo(prompt.trim())

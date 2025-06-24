@@ -1,6 +1,6 @@
 import pdfParse from "pdf-parse-fork"
-import { sanitizeResumeText } from "../libs/sanitizeResumeText";
-import { mentionsAttachmentKeywords } from "../libs/constants";
+import { sanitizeResumeText } from "../libs/sanitizeResumeText.js";
+import { mentionsAttachmentKeywords } from "../libs/constants.js";
 
 export const systemInstructions = {
     role: "system",
