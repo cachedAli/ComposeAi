@@ -1,4 +1,4 @@
-import express from "express"
+import express from "express";
 import { googleOAuthCallback, saveToken } from "../controller/oauth.controller.js";
 
 const oauthRouter = express.Router();
