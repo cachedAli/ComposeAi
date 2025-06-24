@@ -2,29 +2,44 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 
 import { features } from "@/libs/constants/homepageConstants";
+import { Helmet } from "react-helmet-async";
 
 const Features = () => {
   return (
-    <section
-      id="features"
-      className="flex items-center justify-center flex-col gap-6 py-6 px-2 text-center"
-    >
-      {/* Tagline */}
-      <span className="border border-t-cyan-500 border-r-cyan-500 border-l-indigo-500 border-b-indigo-500 py-2 px-4 rounded-full text-sm flex items-center gap-2">
-        <h2 className="max-sm:text-xs">Features</h2>
-      </span>
+    <>
+      <Helmet>
+        <title>ComposeAI – Powerful Email Productivity Features</title>
+        <meta
+          name="description"
+          content="Explore the features of ComposeAI: AI email generation, grammar fixes, tone adjustments, and more to supercharge your productivity."
+        />
+        <link
+          rel="canonical"
+          href="https://compose-ai-app.vercel.app/#features"
+        />
+      </Helmet>
 
-      {/* Headline */}
-      <div className="flex flex-col items-center justify-center gap-4 max-w-[1000px]">
-        <h1
-          className={clsx("text-5xl font-bold leading-14", "max-sm:text-4xl")}
-        >
-          Discover how ComposeAI can transform your email workflow{" "}
-        </h1>
-      </div>
+      <section
+        id="features"
+        className="flex items-center justify-center flex-col gap-6 py-6 px-2 text-center"
+      >
+        {/* Tagline */}
+        <span className="border border-t-cyan-500 border-r-cyan-500 border-l-indigo-500 border-b-indigo-500 py-2 px-4 rounded-full text-sm flex items-center gap-2">
+          <h2 className="max-sm:text-xs">Features</h2>
+        </span>
 
-      <AllFeatures />
-    </section>
+        {/* Headline */}
+        <div className="flex flex-col items-center justify-center gap-4 max-w-[1000px]">
+          <h1
+            className={clsx("text-5xl font-bold leading-14", "max-sm:text-4xl")}
+          >
+            Discover how ComposeAI can transform your email workflow{" "}
+          </h1>
+        </div>
+
+        <AllFeatures />
+      </section>
+    </>
   );
 };
 

@@ -23,7 +23,7 @@ const OAuthSuccess = () => {
 
       try {
         await axios.post(
-          "http://localhost:3000/api/oauth/save-token",
+          `${import.meta.env.VITE_API_OAUTH_URL}/save-token`,
           { email, refresh_token },
           {
             headers: {

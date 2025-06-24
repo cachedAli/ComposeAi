@@ -33,7 +33,7 @@ export const googleOAuthCallback = async (req: Request, res: Response) => {
         const payload = ticket.getPayload();
         const email = payload?.email;
 
-        res.redirect(`http://localhost:5173/oauth/success?email=${email}&refresh_token=${refresh_token}`);
+        res.redirect(`${process.env.CLIENT_URL}oauth/success?email=${email}&refresh_token=${refresh_token}`);
     } catch (err) {
         console.error("OAuth error", err);
         res.status(500).send("Something went wrong with Google OAuth.");

@@ -5,14 +5,16 @@ const Footer = () => {
   return (
     <footer className="w-full px-6 py-10 ">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-12">
-
         {/* Logo + Tagline */}
-        <div className={clsx("flex flex-col items-start gap-4",
+        <div
+          className={clsx(
+            "flex flex-col items-start gap-4",
             "max-sm:items-center max-sm:text-center"
-        )}>
+          )}
+        >
           <img
             src={composeAi}
-            alt="ComposeAI"
+            alt="ComposeAI Logo"
             className="h-10 object-contain"
           />
           <p className="text-sm text-gray-400 max-w-xs">
@@ -39,7 +41,7 @@ export default Footer;
 
 const Company = () => {
   return (
-    <div className="flex flex-col gap-4">
+    <nav aria-label="Company" className="flex flex-col gap-4">
       <h3 className="font-semibold text-lg">Company</h3>
       <ul className="text-gray-400 space-y-2">
         <li>
@@ -61,13 +63,13 @@ const Company = () => {
           </a>
         </li>
       </ul>
-    </div>
+    </nav>
   );
 };
 
 const Connect = () => {
   return (
-    <div className="flex flex-col gap-4">
+    <nav aria-label="Connect" className="flex flex-col gap-4">
       <h3 className="font-semibold text-lg">Connect</h3>
       <ul className="text-gray-400 space-y-2">
         <li>
@@ -101,6 +103,6 @@ const Connect = () => {
           </a>
         </li>
       </ul>
-    </div>
+    </nav>
   );
 };
