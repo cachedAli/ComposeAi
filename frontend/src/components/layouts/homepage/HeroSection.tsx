@@ -83,7 +83,7 @@ const HeroSection = () => {
         <div className="flex flex-col items-center justify-center gap-4 "></div>
         <Button
           variant="secondary"
-          className="w-[370px]"
+          className="w-[370px] max-sm:text-sm max-sm:w-[280px]"
           onClick={() => {
             preloadEmailAssistant();
             navigate("/email-assistant");
