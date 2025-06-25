@@ -61,7 +61,7 @@ const ChatTopContent = () => {
               )}
             </>
           ) : (
-            <>Hi, Mohammad Ali!</>
+            <>Hi there!</>
           )}
         </h2>
       </div>
