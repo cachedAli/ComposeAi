@@ -46,7 +46,7 @@ const ChatTopContent = () => {
         <AssistantLogo />
 
         {/* User name */}
-        <h2 className="text-5xl font-medium flex items-center gap-2">
+        <h2 className="text-5xl font-medium flex items-center gap-2 max-sm:text-2xl max-lg:text-4xl">
           {user ? (
             <>
               Hi,
@@ -61,12 +61,12 @@ const ChatTopContent = () => {
               )}
             </>
           ) : (
-            <>Hi there!</>
+            <>Hi, Mohammad Ali!</>
           )}
         </h2>
       </div>
 
-      <p>How can I help you today?</p>
+      <p className="max-sm:text-sm">How can I help you today?</p>
     </div>
   );
 };
