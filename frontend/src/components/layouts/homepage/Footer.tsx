@@ -62,6 +62,14 @@ const Company = () => {
             Contact
           </a>
         </li>
+        <li>
+          <a
+            href="/privacy.html"
+            className="hover:text-white transition-colors"
+          >
+            Privacy Policy
+          </a>
+        </li>
       </ul>
     </nav>
   );
