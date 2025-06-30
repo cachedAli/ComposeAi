@@ -338,8 +338,11 @@ export const sendEmail = async (req: Request, res: Response) => {
     }
 
     // Check if user mentioned any keyword like "attach my resume"
+    const normalize = (s: string) =>
+        s.toLowerCase().replace(/[^\w\s]/g, "").replace(/\s+/g, " ").trim();
+
     const mentionsAttachment = mentionsAttachmentKeywords.some(keyword =>
-        draft.content.toLowerCase().includes(keyword)
+        normalize(draft.content).includes(normalize(keyword))
     );
 
     let attachment = null;
